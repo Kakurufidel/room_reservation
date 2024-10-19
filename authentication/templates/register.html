@@ -1,0 +1,10 @@
+{% extends 'base_auth.html' %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<h2>Inscription</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="form-control btn btn-primary">S'inscrire</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block title %}Liste des Reservations{% endblock %}
+{% block content %}
+<h1>Liste des Liste des Reservations</h1>
+<ul class="list-group">
+  {% for reservation in reservations %}
+  <li class="list-group-item">
+    {{ reservation.room.name }} - du {{ reservation.date_start }} au {{ reservation.date_end }}
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'reserver_room' %}">Réserver une Salle</a>
+{% endblock %}
