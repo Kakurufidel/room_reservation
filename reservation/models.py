@@ -1,23 +1,22 @@
 from django.db import models
-from authentication.models import User
+from .apps.core.models import BaseModel
 
-class Room(models.Model):
-    name = models.CharField(max_length=100)
+
+class Room(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
     locate = models.CharField(max_length=200)
     capacity = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=1)
 
     def __str__(self):
         return self.name
 
 
-class Reservation(models.Model):
-    room = models.CharField(max_length=255)
+class Reservation(BaseModel):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, default="pending")
 
     def __str__(self):
-        return f"Reservation for {self.room} from {self.date_start} to {self.date_end}"
-
-    class Meta:
-        unique_together = ('room', 'date_start', 'date_end')
+        return f"Reservation for {self.room.name} from {self.date_start} to {self.date_end}"

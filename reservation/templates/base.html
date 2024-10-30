@@ -47,11 +47,8 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'list_reservations' %}">Reservations</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'new_room' %}">Creer une Salle</a>
-            </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
+              <a class="nav-link" href="{% url 'api_logout' %}">Déconnexion</a>
             </li>
             {% else %}
             <li class="nav-item">

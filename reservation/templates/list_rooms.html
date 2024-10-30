@@ -3,17 +3,12 @@
 {% block title %}Liste des Salles{% endblock %}
 {% block content %}
 <h1>Liste des Salles de Réunion</h1>
-    <ul>
-        {% for room in rooms %}
-        <li>{{ room.name }} - {{ room.locate }} (Capacity: {{ room.capacity }})</li>
-        {% endfor %}
-    </ul>
-    <ul>
-        {% for room in rooms %}
-            <li>
-                {{ room.name }} - {{ room.locate }} (Capacity: {{ room.capacity }})
-                <a href="{% url 'reserve_room' room.id %}">Réserver cette Salle</a>
-            </li>
-        {% endfor %}
-    </ul>
+<ul>
+    {% for room in rooms %}
+    <li>
+        {{ room.name }} - {{ room.locate }} (Capacity: {{ room.capacity }})
+        <a href="{% url 'reserver_room' room.id room.name %}">Reserve</a>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

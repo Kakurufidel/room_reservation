@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Modifier la Réservation
+{% endblock %}
+
+{% block content %}
+<h1>Modifier la Réservation</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="room" class="form-label">Salle</label>
+        <input type="text" class="form-control" id="room" value="{{ reservation.room.name }}" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="date_start" class="form-label">Date de Début</label>
+        <input type="datetime-local" class="form-control" id="date_start" name="date_start" value="{{ reservation.date_start|date:'Y-m-d\TH:i' }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="date_end" class="form-label">Date de Fin</label>
+        <input type="datetime-local" class="form-control" id="date_end" name="date_end" value="{{ reservation.date_end|date:'Y-m-d\TH:i' }}" required>
+    </div>
+    <button type="submit" class="btn btn-success">Sauvegarder les Modifications</button>
+    <a href="{% url 'list_reservations' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

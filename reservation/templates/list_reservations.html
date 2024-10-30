@@ -1,12 +1,24 @@
-{% extends 'base.html' %} {% block title %}Liste des Reservations{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}
+Liste des Réservations
+{% endblock %}
+
 {% block content %}
-<h1>Liste des Liste des Reservations</h1>
+<h1>Liste des Réservations</h1>
 <ul class="list-group">
   {% for reservation in reservations %}
   <li class="list-group-item">
     {{ reservation.room.name }} - du {{ reservation.date_start }} au {{ reservation.date_end }}
+    <div class="float-end">
+      <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-primary btn-sm">Modifier</a>
+      <form action="{% url 'delete_reservation' reservation.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+      </form>
+    </div>
   </li>
   {% endfor %}
 </ul>
-<a href="{% url 'reserver_room' %}">Réserver une Salle</a>
+<a href="{% url 'reserver_room' %}" class="btn btn-success">Réserver une Salle</a>
 {% endblock %}

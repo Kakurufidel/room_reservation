@@ -1,8 +1,16 @@
 {% extends 'base.html' %} {% block title %}Réserver une Salle{% endblock %}
 {% block content %}
-<h1>Réserver une Salle</h1>
+<h1>Réserver la Salle {{ room_name }}</h1>
+
 <form method="POST">
-  {% csrf_token %} {{ form.as_p }}
+  {% csrf_token %}
+
+  <p>Vous réserver la salle {{ room_name }} :</p>
+
+  {{ form.date_start.label }} {{ form.date_start }}
+  <br>
+  {{ form.date_end.label }} {{ form.date_end }}
+
   <button type="submit" class="form-control btn btn-primary">Réserver</button>
 </form>
 {% endblock %}
