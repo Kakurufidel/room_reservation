@@ -6,7 +6,7 @@
   {% csrf_token %}
 
   <p>Vous réserver la salle {{ room_name }} :</p>
-
+  {{ form.room}}
   {{ form.date_start.label }} {{ form.date_start }}
   <br>
   {{ form.date_end.label }} {{ form.date_end }}

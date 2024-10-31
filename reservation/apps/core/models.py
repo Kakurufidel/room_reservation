@@ -17,7 +17,10 @@ class BaseModel(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True
     )
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
 
     objects = ReservationQuerySet.as_manager()
 

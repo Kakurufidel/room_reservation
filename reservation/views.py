@@ -12,6 +12,7 @@ def list_rooms(request):
     return render(request, "list_rooms.html", {"rooms": rooms})
 
 
+@login_required
 def reserver_room(request, room_id, room_name):
     if request.method == "POST":
         form = ReservationForm(request.POST)
@@ -20,7 +21,7 @@ def reserver_room(request, room_id, room_name):
             reservation.user = request.user
             reservation.room_id = room_id
             reservation.save()
-            return redirect(request, "confirmation_page", room_name=room_name)
+            return redirect(request, "confirmation_page", {"room_name": room_name})
     else:
         form = ReservationForm()
     return render(request, "reserver_room.html", {"form": form, "room_name": room_name})
@@ -30,6 +31,7 @@ def confirmation_page(request, room_name):
     return render(request, "confirmation_page.html", {"room_name": room_name})
 
 
+@login_required
 def new_room(request):
     if request.method == "POST":
         form = RoomForm(request.POST)
