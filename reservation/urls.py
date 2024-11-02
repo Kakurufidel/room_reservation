@@ -5,7 +5,7 @@ urlpatterns = [
     # path("register/", RegisterView.as_view(), name="register"),
     #  path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("", include("reservation.apps.authentication.urls")),
-    # path("", include("reservation.apps.api.urls")),
+    path("", include("reservation.apps.api.urls")),
     # path("/", include("reservation.apps.core.urls")),
     #     path("login/", obtain_auth_token, name="login"),
     #     path("logout/", LogoutView.as_view(), name="api_logout"),

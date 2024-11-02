@@ -44,5 +44,5 @@ class BaseModel(models.Model):
         Annule la réservation et met à jour le statut de la salle.
         """
         self.deleted_at = timezone.now()
-        self.status = "available"  # Met à jour le statut en 'disponible'
+        self.status = "available"
         self.save()

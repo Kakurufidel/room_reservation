@@ -4,7 +4,6 @@ from .views import logout_view
 from . import views
 from .views import reserver_room
 
-# from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),

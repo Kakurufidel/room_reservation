@@ -13,7 +13,7 @@ from .serializers import (
     UserRegistrationSerializer,
 )
 
-User = get_user_model()  # Utilisation du modèle utilisateur personnalisé
+User = get_user_model()
 
 
 class UserList(generics.ListCreateAPIView):
