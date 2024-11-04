@@ -5,6 +5,7 @@ from .apps.core.models import BaseModel
 class Room(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     locate = models.CharField(max_length=200)
+    image_room = models.ImageField(verbose_name="image_Room")
     capacity = models.IntegerField()
     price = models.CharField(max_length=200, default="")
 

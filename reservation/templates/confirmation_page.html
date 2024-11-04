@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
+    {% block title %}
     <title>Confirmation de Réservation</title>
+    {% endblock %}
 </head>
+
 <body>
+    {% block content %}
     <h1>Réservation confirmée</h1>
     <p>Vous avez réservé la salle {{ room_name }}.</p>
+
+    <!-- Redirection directe après 3 secondes -->
+    <meta http-equiv="refresh" content="3;url={% url 'list_reservations' %}">
+    <p>merci pour la reservation</p>
+    {% endblock %}
 </body>
 </html>

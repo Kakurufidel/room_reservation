@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from .models import Room, Reservation
 from .forms import ReservationForm, RoomForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django.contrib.auth import get_user_model
 
 
 def list_rooms(request):
@@ -20,14 +18,18 @@ def reserver_room(request, room_id, room_name):
             reservation.user = request.user
             reservation.room_id = room_id
             reservation.save()
-            return redirect(request, "confirmation_page", {"room_name": room_name})
+            return redirect(
+                "confirmation_page", room_name=room_name
+            )  # Redirection correcte
     else:
         form = ReservationForm()
     return render(request, "reserver_room.html", {"form": form, "room_name": room_name})
 
 
 def confirmation_page(request, room_name):
-    return render(request, "confirmation_page.html", {"room_name": room_name})
+    return render(
+        request, "confirmation_page.html", {"room_name": room_name}
+    )  # Passage du contexte correct
 
 
 @login_required
@@ -40,12 +42,12 @@ def new_room(request):
             return redirect("list_rooms")
     else:
         form = RoomForm()
-        return render(request, "new_room.html", {"form": form})
+    return render(request, "new_room.html", {"form": form})
 
 
 @login_required
 def list_reservations(request):
-    reservations = Reservation.objects.filter(user=request.user)
+    reservations = Reservation.objects.filter(created_by=request.user)
     return render(request, "list_reservations.html", {"reservations": reservations})
 
 

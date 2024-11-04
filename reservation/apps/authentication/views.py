@@ -50,11 +50,10 @@ def reserver_room(request, room_id, room_name):
             reservation.user = request.user
             reservation.room_id = room_id
             reservation.save()
-            return redirect(
-                request, f"confirmation/{room_name}", {"room_name": room_name}
-            )
+            return render(request, "confirmation_page.html", {"room_name": room_name})
     else:
         form = ReservationForm()
+    return render(request, "reserver_room.html", {"form": form, "room_name": room_name})
 
 
 def confirmation_page(request, room_name):
@@ -73,7 +72,7 @@ def new_room(request):
         return render(request, "new_room.html", {"form": form})
 
 
-@login_required
+# @login_required
 def list_reservations(request):
     reservations = Reservation.objects.filter(user=request.user)
     return render(request, "list_reservations.html", {"reservations": reservations})
