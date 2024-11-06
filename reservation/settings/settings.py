@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_bootstrap5",
     "reservation",
     "active_link",
     "widget_tweaks",
@@ -73,6 +74,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "reservation.apps.authentication.middleware.UserRequestHistoryMiddleware",
 ]
 
 ROOT_URLCONF = "reservation.urls"
@@ -88,7 +90,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "reservation.context_processor.user_reservations",
+                "reservation.apps.core.context_processor.user_reservations_context",
+                "reservation.apps.core.context_processor.user_request_history",
             ],
         },
     },
@@ -153,4 +156,6 @@ AUTH_USER_MODEL = "authentication.User"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+MEDIA_ROOT = BASE_DIR / "images"
+
 from .local_settings import *

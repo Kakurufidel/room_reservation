@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Confirmer la Suppression
+Suppression
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@ Confirmer la Suppression
 <p>Du {{ reservation.date_start }} au {{ reservation.date_end }}</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+    <button type="submit" class="btn btn-danger"> supprimer</button>
     <a href="{% url 'list_reservations' %}" class="btn btn-secondary">Annuler</a>
 </form>
 {% endblock %}

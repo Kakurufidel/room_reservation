@@ -1,70 +1,81 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>{% block title %}{% endblock %}</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    />
-    <style>
-        form{
-            width: 40%;
-            min-height: 80%;
-            background: #ddd transparent;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        @media only screen and (max-width: 600px) {
-            form{
-                width: 100%;
-            }
-        }
-    </style>
-  </head>
-  <body>
+<html lang="en">
+
+<head>
+  {% load static %}
+  {% load django_bootstrap5 %}
+  {% load widget_tweaks %}
+  {% load active_link_tags %}
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href=" {% static 'assets/vendor/aos/aos.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+<body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'list_rooms' %}">Reservation</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'list_rooms' %}">Liste</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'list_reservations' %}">Reservations</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'api_logout' %}">Déconnexion</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Connexion</a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'list_rooms' %}">Reservation</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'list_rooms' %}">Liste des Salles</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'list_reservations' %}">Réservations</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'user_history' %}">Historique</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">S'inscrire</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
     </header>
     <div class="container">{% block content %}{% endblock %}</div>
     <footer class="footer mt-auto py-3 bg-light">
-      <div class="container">
-        <span class="text-muted">Reservation &copy; 2024</span>
-      </div>
+        <div class="container">
+            <span class="text-muted">Reservation &copy; 2024</span>
+        </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  </body>
+</body>
 </html>

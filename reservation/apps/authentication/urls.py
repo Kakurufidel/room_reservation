@@ -1,42 +1,65 @@
-from django.contrib import admin
 from django.urls import path
-from .views import logout_view
-from . import views
-from .views import reserver_room
+from django.contrib import admin
 
+from reservation.apps.authentication.views import (
+    LoginView,
+    RegistrationView,
+    LogoutView,
+    ListRoomsView,
+    ReserverRoomView,
+    ConfirmationPageView,
+)
+from reservation.apps.authentication.views import (
+    NewRoomView,
+    ListReservationsView,
+    UserHistoryView,
+    ModifyReservationView,
+    DeleteReservationView,
+    ConfirmDeleteReservationView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("logout/", logout_view, name="api_logout"),
-    # path("", include("authentication.urls")),
-    path("", views.list_rooms, name="list_rooms"),
+    path("", LoginView.as_view(), name="login"),
+    path("signup/", RegistrationView.as_view(), name="register"),
+    path("rooms/", ListRoomsView.as_view(), name="list_rooms"),
+    path("logout/", LogoutView.as_view(), name="logout"),
     path(
         "reserve/<int:room_id>/<str:room_name>/",
-        views.reserver_room,
+        ReserverRoomView.as_view(),
         name="reserver_room",
     ),
     path(
         "confirmation/<str:room_name>/",
-        views.confirmation_page,
+        ConfirmationPageView.as_view(),
         name="confirmation_page",
     ),
-    path("list_reservations", views.list_reservations, name="list_reservations"),
-    path("new_room", views.new_room, name="new_room"),
+    path(
+        "reservations/modify/<int:pk>/",
+        ModifyReservationView.as_view(),
+        name="modify_reservation",
+    ),
+    path(
+        "reservations/delete/<int:pk>/",
+        DeleteReservationView.as_view(),
+        name="confirm_delete",
+    ),
+    path("new-room/", NewRoomView.as_view(), name="new_room"),
+    path("reservations/", ListReservationsView.as_view(), name="list_reservations"),
+    path("user_history/", UserHistoryView.as_view(), name="user_history"),
+    path(
+        "reservations/modify/<int:pk>/",
+        ModifyReservationView.as_view(),
+        name="modify_reservation",
+    ),
+    path(
+        "reservations/delete/<int:pk>/",
+        ConfirmDeleteReservationView.as_view(),
+        name="confirm_delete",
+    ),
+    path(
+        "reservations/delete/<int:pk>/confirm/",
+        DeleteReservationView.as_view(),
+        name="delete_reservation",
+    ),  # URL pour confirmer la suppression
 ]
-
-
-# from django.contrib import admin
-# from django.urls import path, include
-# from . import views
-# from .views import reserver_room
-
-
-# urlpatterns = [
-#     path("admin/", admin.site.urls),
-#     path("", include("authentication.urls")),
-#     path("", views.list_rooms, name="list_rooms"),
-#     path("reserve/<int:room_id>/<str:room_name>/", views.reserver_room,name="reserver_room"),
-#     path("confirmation/<str:room_name>/",views.confirmation_page,name="confirmation_page"),
-#     path("list_reservations", views.list_reservations, name="list_reservations"),
-#     path("new_room", views.new_room, name="new_room"),
-# ]

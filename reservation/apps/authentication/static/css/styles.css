@@ -50,3 +50,17 @@ button:hover {
 .errorlist {
     display: none;
 }
+
+form{
+    margin:auto;
+      width: 40%;
+      min-height: 80%;
+      background: #ddd transparent;
+      padding: 20px;
+      border-radius: 5px;
+  }
+  @media only screen and (max-width: 600px) {
+      form{
+          width: 100%;
+      }
+  }

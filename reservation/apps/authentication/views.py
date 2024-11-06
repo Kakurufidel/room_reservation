@@ -1,15 +1,41 @@
-from reservation.models import Room, Reservation
-from reservation.views import ReservationForm, RoomForm
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
-from .forms import UserCreationForm, UserLoginForm
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from reservation.models import Room, Reservation
+from reservation.forms import ReservationForm, RoomForm
+from .forms import UserCreationForm, UserLoginForm
+from django.views.generic import TemplateView
+from django.views.generic import UpdateView
+from django.urls import reverse
+from django.utils import timezone
+
+# from reservation.apps.core.models import UserRequestHistory
 
 
-def login_view(request):
-    if request.method == "POST":
+class RegistrationView(View):
+    def get(self, request):
+        form = UserCreationForm()
+        return render(request, "register.html", {"form": form})
+
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, "Inscription réussie. Vous pouvez maintenant vous connecter."
+            )
+            return redirect("login")
+        return render(request, "register.html", {"form": form})
+
+
+class LoginView(View):
+    def get(self, request):
+        form = UserLoginForm()
+        return render(request, "login.html", {"form": form})
+
+    def post(self, request):
         form = UserLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
@@ -18,32 +44,32 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 print("tout est bon")
-                return redirect("liste_salles")
+                return redirect("list_rooms")
             else:
                 messages.error(request, "Nom d’utilisateur ou mot de passe incorrect.")
-    else:
-        form = UserLoginForm()
-    return render(request, "login.html", {"form": form})
+        return render(request, "login.html", {"form": form})
 
 
-def logout_view(request):
-    """
-    Logs the user out and redirects to the success page.
-
-    :param request: the request object
-    :return: a redirect to the success page
-    """
-    logout(request)
-    return redirect(login_view)
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect("login")
 
 
-def list_rooms(request):
-    rooms = Room.objects.all()
-    return render(request, "list_rooms.html", {"rooms": rooms})
+class ListRoomsView(View):
+    def get(self, request):
+        rooms = Room.objects.all()
+        return render(request, "list_rooms.html", {"rooms": rooms})
 
 
-def reserver_room(request, room_id, room_name):
-    if request.method == "POST":
+class ReserverRoomView(LoginRequiredMixin, View):
+    def get(self, request, room_id, room_name):
+        form = ReservationForm()
+        return render(
+            request, "reserver_room.html", {"form": form, "room_name": room_name}
+        )
+
+    def post(self, request, room_id, room_name):
         form = ReservationForm(request.POST)
         if form.is_valid():
             reservation = form.save(commit=False)
@@ -51,28 +77,95 @@ def reserver_room(request, room_id, room_name):
             reservation.room_id = room_id
             reservation.save()
             return render(request, "confirmation_page.html", {"room_name": room_name})
-    else:
-        form = ReservationForm()
-    return render(request, "reserver_room.html", {"form": form, "room_name": room_name})
+        return render(
+            request, "reserver_room.html", {"form": form, "room_name": room_name}
+        )
 
 
-def confirmation_page(request, room_name):
-    return render(request, "confirmation_page.html", {"room_name": room_name})
+class ConfirmationPageView(View):
+    def get(self, request, room_name):
+        return render(request, "confirmation_page.html", {"room_name": room_name})
 
 
-def new_room(request):
-    if request.method == "POST":
+class NewRoomView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = RoomForm()
+        return render(request, "new_room.html", {"form": form})
+
+    def post(self, request):
         form = RoomForm(request.POST)
         if form.is_valid():
             room = form.save(commit=False)
             room.save()
             return redirect("list_rooms")
-    else:
-        form = RoomForm()
         return render(request, "new_room.html", {"form": form})
 
 
-# @login_required
-def list_reservations(request):
-    reservations = Reservation.objects.filter(user=request.user)
-    return render(request, "list_reservations.html", {"reservations": reservations})
+class ListReservationsView(LoginRequiredMixin, View):
+    def get(self, request):
+        user_reservations = Reservation.objects.all()
+        return render(
+            request, "list_reservations.html", {"reservation": user_reservations}
+        )
+
+
+class UserHistoryView(TemplateView):
+    template_name = "user_history.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 'user_request_history' est supposé être ajouté au contexte par le middleware
+        context["user_history"] = self.request.user.request_history.all()
+        return context
+
+
+# modification de la reservation
+
+
+class ModifyReservationView(UpdateView):
+    model = Reservation
+    fields = ["room", "date_start", "date_end", "status"]
+    template_name = "modify_reservation.html"
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+        # on redirige
+
+    def get_success_url(self):
+        return reverse("list_reservations")
+
+
+# pour la suppresion
+
+
+class ConfirmDeleteReservationView(View):
+    def get(self, request, pk):
+        reservation = get_object_or_404(
+            Reservation, pk=pk, created_by=request.user, is_delete=False
+        )
+        return render(request, "confirm_delete.html", {"reservation": reservation})
+
+
+class DeleteReservationView(View):
+    def post(self, request, pk):
+        reservation = get_object_or_404(
+            Reservation, pk=pk, created_by=request.user, is_delete=False
+        )
+        # on change le statu de is_delete
+        reservation.is_delete = True
+        reservation.deleted_at = timezone.now()
+        reservation.save()
+        return redirect("list_reservations")
+
+
+# pour le middleware
+
+# class UserHistoryView(TemplateView):
+#     template_name = 'user_history.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         # Récupère l'historique des actions de l'utilisateur authentifié
+#         context['user_history'] = UserRequestHistory.objects.filter(created_by=self.request.user).order_by('-created_at')
+#         return context

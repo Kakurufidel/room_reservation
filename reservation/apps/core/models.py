@@ -17,10 +17,7 @@ class BaseModel(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True
     )
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
-    deleted_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     objects = ReservationQuerySet.as_manager()
 
@@ -46,3 +43,10 @@ class BaseModel(models.Model):
         self.deleted_at = timezone.now()
         self.status = "available"
         self.save()
+
+
+# class UserRequestHistory(BaseModel):
+#     path = models.CharField(max_length=255)
+
+#     def __str__(self):
+#         return f"{self.created_by.username} accessed {self.path} at {self.created_at}"

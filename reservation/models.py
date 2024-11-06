@@ -18,6 +18,7 @@ class Reservation(BaseModel):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     status = models.CharField(max_length=20, default="encour")
+    is_delete = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Reservation for {self.room.name} from {self.date_start} to {self.date_end}"

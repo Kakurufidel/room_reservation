@@ -1,43 +1,4 @@
-{% comment %} avec extends de base.html {% endcomment %}
-
-
-
-{% comment %}
-{% extends 'base.html' %}
-
-{% block title %}
-Liste des Réservations
-{% endblock %}
-
-{% block content %}
-<h1>Liste des Réservations</h1>
-<ul class="list-group">
-  {% for reservation in reservations %}
-  <li class="list-group-item">
-    {{ reservation.room.name }} - du {{ reservation.date_start }} au {{ reservation.date_end }}
-    <div class="float-end">
-      <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-primary btn-sm">Modifier</a>
-      <form action="{% url 'delete_reservation' reservation.id %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-      </form>
-    </div>
-  </li>
-  {% endfor %}
-</ul>
-<a href="{% url 'reserver_room' %}" class="btn btn-success">Réserver une Salle</a>
-{% endblock %}
-
-{% endcomment %}
-
-
-
-
-
-
-
-
-{% comment %} {% extends 'base.html' %}
+ {% extends 'base.html' %}
 
 {% block title %}
 Liste des  mes Réservations
@@ -46,12 +7,12 @@ Liste des  mes Réservations
 {% block content %}
 <h1>Liste des Réservations</h1>
 <ul class="list-group">
-  {% for reservation in user_reservations %}
+  {% for reservations in reservation %}
   <li class="list-group-item">
-    {{ reservation.room.name }} - du {{ reservation.date_start }} au {{ reservation.date_end }}
+    {{ reservations.room.name }} - du {{ reservations.date_start }} au {{ reservations.date_end }}
     <div class="float-end">
-      <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-primary btn-sm">Modifier</a>
-      <form action="{% url 'delete_reservation' reservation.id %}" method="post" style="display:inline;">
+      <a href="{% url 'modify_reservation' reservations.id %}" class="btn btn-primary btn-sm">Modifier</a>
+      <form action="{% url 'confirm_delete' reservations.id %}" method="post" style="display:inline;">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
       </form>
@@ -59,19 +20,5 @@ Liste des  mes Réservations
   </li>
   {% endfor %}
 </ul>
-<a href="{% url 'reserver_room' %}" class="btn btn-success">Réserver une Salle</a>
+{% comment %} <a href="{% url 'reserver_room' %}" class="btn btn-success">Réserver une Salle</a> {% endcomment %}
 {% endblock %}
- {% endcomment %}
-
-
-
-
-
- <h2>Mes réservations</h2>
-<ul>
-    {% for reservation in user_reservations %}
-        <li>{{ reservation.created_at }} - {{ reservation.room.name }}</li>
-    {% empty %}
-        <li>Aucune réservation trouvée.</li>
-    {% endfor %}
-</ul>

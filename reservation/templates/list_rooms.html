@@ -1,14 +1,22 @@
+{% extends "base.html" %}
 
-{% extends 'base.html' %}
-{% block title %}Liste des Salles{% endblock %}
+{% block title %}Liste des salles de reunion{% endblock %}
+
 {% block content %}
-<h1>Liste des Salles de Réunion</h1>
-<ul>
+<h2>Nos salles</h2>
+<div class="row">
     {% for room in rooms %}
-    <li>
-        {{ room.name }} - {{ room.locate }} (Capacity: {{ room.capacity }})
-        <a href="{% url 'reserver_room' room.id room.name %}">Reserve</a>
-    </li>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <p class="card-text">Prix : {{ room.price }} €</p>
+                    <a href="{% url 'reserver_room' room.id room.name %}" class="btn btn-primary">Réserver</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Aucune chambre disponible pour le moment.</p>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
