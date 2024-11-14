@@ -1,10 +1,74 @@
 {% extends 'base_auth.html' %}
-{% block title %}Inscription{% endblock %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Inscription
+{% endblock  %}
+
 {% block content %}
-<h2>Inscription</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="form-control btn btn-primary">S'inscrire</button>
-    </form>
+        <div class="wd-30 mx-auto d-flex justify-content-center">
+            <form method="POST" class="wd-30 mx-auto">
+                {% csrf_token %}
+
+                {% with WIDGET_ERROR_CLASS='is-invalid' %}
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+
+                  <div class="col-md-6 mb-4">
+                        <div data-mdb-input-init class="form-outline">
+                        <label class="form-label" for="id_name">Noms</label>
+                        {% render_field form.username class="form-control " %}
+                        <small class="invalid-feedback">{{ form.errors.name }}</small>
+                        </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline">
+                      <label class="form-label" for="form3Example2">profession</label>
+                      {% render_field form.address class="form-control" %}
+                      <small class="invalid-feedback">{{ form.errors.phone_number }}</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline">
+                      <label class="form-label" for="form3Example2">Adresse</label>
+                      {% render_field form.profession class="form-control" %}
+                      <small class="invalid-feedback">{{ form.errors.phone_number }}</small>
+                    </div>
+                  </div>
+
+
+                <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form3Example3">Adresse mail</label>
+                    {% render_field form.email class="form-control" %}
+                    <small class="invalid-feedback">{{ form.errors.email }}</small>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form3Example4">Mot de passe</label>
+                    {% render_field form.password1 class="form-control" %}
+                    <small class="invalid-feedback">{{ form.errors.password1 }}</small>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form3Example4">Confirmation de mot de passe</label>
+                    {% render_field form.password2 class="form-control" %}
+                    <small class="invalid-feedback">{{ form.errors.password2 }}</small>
+                    </div>
+                </div>
+                {%  endwith %}
+
+
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                  S'inscrire
+                </button>
+
+                <div>
+                  <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Connectez-vous.</a></p>
+                </div>
+            </form>
+            </div>
+
 {% endblock %}

@@ -4,7 +4,7 @@ from reservation.apps.authentication.models import User
 
 
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "locate", "capacity")
+    list_display = ("id", "name", "locate", "capacity", "created_by")
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -12,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ("id", "room", "date_start", "date_end")
+    list_display = ("id", "room", "date_start", "date_end", "created_by")
 
 
 admin.site.register(User, UserAdmin)

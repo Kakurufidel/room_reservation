@@ -8,11 +8,11 @@ class ReservationForm(forms.ModelForm):
         fields = ["room", "date_start", "date_end"]
         widgets = {
             "room": forms.Select(attrs={"class": "form-control"}),
-            "date_start": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+            "date_start": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
             ),
-            "date_end": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+            "date_end": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
             ),
         }
 
@@ -20,7 +20,7 @@ class ReservationForm(forms.ModelForm):
 class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
-        fields = ["name", "locate", "capacity"]
+        fields = ["name", "locate", "capacity", "image_room"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control d-block"}),
             "locate": forms.TextInput(attrs={"class": "form-control d-block"}),

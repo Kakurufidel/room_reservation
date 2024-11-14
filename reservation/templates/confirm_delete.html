@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Suppression
+    Suppression
 {% endblock %}
 
 {% block content %}
-<h1>Confirmer la Suppression</h1>
+<h1>Supprimer</h1>
 <p>Êtes-vous sûr de vouloir supprimer la réservation pour <strong>{{ reservation.room.name }}</strong> ?</p>
 <p>Du {{ reservation.date_start }} au {{ reservation.date_end }}</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger"> supprimer</button>
+    <button type="submit" class="btn btn-danger">Supprimer</button>
     <a href="{% url 'list_reservations' %}" class="btn btn-secondary">Annuler</a>
 </form>
 {% endblock %}

@@ -6,8 +6,9 @@
 {% block title %}Nouvelle Salle{% endblock %}
 {% block content %}
 <h1>Nouvelle Salle</h1>
-<form method="POST">
-  {% csrf_token %} {{ form.as_p }}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+   {{ form.as_p }}
   <button type="submit" class="form-control btn btn-primary">Ajouter</button>
 </form>
 {% endblock %}

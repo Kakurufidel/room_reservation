@@ -1,10 +1,40 @@
 {% extends 'base_auth.html' %}
+{% load widget_tweaks %}
 {% block title %}Connexion{% endblock %}
 {% block content %}
-    <h2>Connexion</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="form-control btn btn-primary">Se connecter</button>
-    </form>
+    <h2 class="text-center aos-init aos-animate"data-aos="fade-up" data-aos-delay="100">Connexion</h2>
+    <div class="wd-30 mx-auto d-flex justify-content-center">
+        <form method="POST" class="wd-30 mx-auto">
+            {% csrf_token %}
+
+            {% with WIDGET_ERROR_CLASS='is-invalid' %}
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+
+              <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline">
+                    <label class="form-label" for="id_name">Noms</label>
+                    {% render_field form.username class="form-control " %}
+                    <small class="invalid-feedback">{{ form.errors.name }}</small>
+                    </div>
+              </div>
+            <div class="col-md-6 mb-4">
+                <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="form3Example4">Mot de passe</label>
+                {% render_field form.password class="form-control" %}
+                <small class="invalid-feedback">{{ form.errors.password }}</small>
+                </div>
+            </div>
+
+            {%  endwith %}
+
+
+            <button type="submit" class="btn btn-primary btn-block mb-4">
+              Se connecter
+            </button>
+
+            <div>
+              <p>Vous avez déjà un compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+            </div>
+        </form>
+
 {% endblock %}

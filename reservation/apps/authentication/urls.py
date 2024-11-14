@@ -1,65 +1,59 @@
 from django.urls import path
 from django.contrib import admin
-
+from django.conf.urls.static import static
+from django.conf import settings
 from reservation.apps.authentication.views import (
     LoginView,
     RegistrationView,
     LogoutView,
     ListRoomsView,
     ReserverRoomView,
-    ConfirmationPageView,
-)
-from reservation.apps.authentication.views import (
     NewRoomView,
     ListReservationsView,
     UserHistoryView,
     ModifyReservationView,
     DeleteReservationView,
     ConfirmDeleteReservationView,
+    ConfirmationReservationView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", LoginView.as_view(), name="login"),
+    path("login/", LoginView.as_view(), name="login"),
     path("signup/", RegistrationView.as_view(), name="register"),
-    path("rooms/", ListRoomsView.as_view(), name="list_rooms"),
+    path("", ListRoomsView.as_view(), name="list_rooms"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path(
-        "reserve/<int:room_id>/<str:room_name>/",
+        "reservation/<int:room_id>/<str:room_name>/",
         ReserverRoomView.as_view(),
         name="reserver_room",
     ),
     path(
-        "confirmation/<str:room_name>/",
-        ConfirmationPageView.as_view(),
-        name="confirmation_page",
+        "confirmation/<int:reservation_id>/",
+        ConfirmationReservationView.as_view(),
+        name="confirmation_reservation",
     ),
+    path("new_room/", NewRoomView.as_view(), name="new_room"),
     path(
-        "reservations/modify/<int:pk>/",
+        "list_reservations/", ListReservationsView.as_view(), name="list_reservations"
+    ),
+    path("history/", UserHistoryView.as_view(), name="user_history"),
+    path(
+        "reservation/modify/<int:pk>/",
         ModifyReservationView.as_view(),
         name="modify_reservation",
     ),
     path(
-        "reservations/delete/<int:pk>/",
-        DeleteReservationView.as_view(),
-        name="confirm_delete",
-    ),
-    path("new-room/", NewRoomView.as_view(), name="new_room"),
-    path("reservations/", ListReservationsView.as_view(), name="list_reservations"),
-    path("user_history/", UserHistoryView.as_view(), name="user_history"),
-    path(
-        "reservations/modify/<int:pk>/",
-        ModifyReservationView.as_view(),
-        name="modify_reservation",
-    ),
-    path(
-        "reservations/delete/<int:pk>/",
+        "reservation/confirm_delete/<int:pk>/",
         ConfirmDeleteReservationView.as_view(),
-        name="confirm_delete",
+        name="confirm_delete_reservation",
     ),
     path(
-        "reservations/delete/<int:pk>/confirm/",
+        "reservation/delete/<int:pk>/",
         DeleteReservationView.as_view(),
         name="delete_reservation",
-    ),  # URL pour confirmer la suppression
+    ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

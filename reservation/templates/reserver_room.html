@@ -1,15 +1,30 @@
-{% extends 'base.html' %} {% block title %}Réserver une Salle{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Réserver une Salle{% endblock %}
+
+{% load widget_tweaks %}
+
 {% block content %}
 <h1>Réserver la Salle {{ room_name }}</h1>
 
-<form method="POST">
+<form method="POST" class="text-lowercase w-50 p-b-5 position-relative mx-auto">
   {% csrf_token %}
 
-  <p>Vous réserver la salle {{ room_name }} :</p>
-  {{ form.room}}
-  {{ form.date_start.label }} {{ form.date_start }}
-  <br>
-  {{ form.date_end.label }} {{ form.date_end }}
+  <p>Vous réservez la salle <strong>{{ room_name }}</strong> :</p>
+
+  <!-- Champ de la salle (caché ou désactivé) -->
+  <input type="hidden" name="room" value="{{ room_id }}" />
+
+  <!-- Champ de la date de début -->
+  <div class="form-group">
+    <label for="{{ form.date_start.id_for_label }}">{{ form.date_start.label }}</label>
+    {% render_field form.date_start class="form-control" %}
+  </div>
+
+  <!-- Champ de la date de fin -->
+  <div class="form-group">
+    <label for="{{ form.date_end.id_for_label }}">{{ form.date_end.label }}</label>
+    {% render_field form.date_end class="form-control" %}
+    </div>
 
   <button type="submit" class="form-control btn btn-primary">Réserver</button>
 </form>

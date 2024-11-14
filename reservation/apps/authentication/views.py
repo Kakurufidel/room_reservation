@@ -10,8 +10,9 @@ from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 from django.urls import reverse
 from django.utils import timezone
-
-# from reservation.apps.core.models import UserRequestHistory
+from django.core.paginator import Paginator
+from django.db.models import Count
+from .models import UserRequestHistory
 
 
 class RegistrationView(View):
@@ -43,7 +44,6 @@ class LoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                print("tout est bon")
                 return redirect("list_rooms")
             else:
                 messages.error(request, "Nom d’utilisateur ou mot de passe incorrect.")
@@ -56,10 +56,20 @@ class LogoutView(View):
         return redirect("login")
 
 
-class ListRoomsView(View):
+class ListRoomsView(LoginRequiredMixin, View):
     def get(self, request):
-        rooms = Room.objects.all()
-        return render(request, "list_rooms.html", {"rooms": rooms})
+        rooms_list = Room.objects.annotate(reservation_count=Count("reservation"))
+
+        # Pagination
+        paginator = Paginator(rooms_list, 8)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        # Récupérer le nom d'utilisateur de la session
+        username = request.session.get("username")
+        return render(
+            request, "list_rooms.html", {"page_obj": page_obj, "username": username}
+        )
 
 
 class ReserverRoomView(LoginRequiredMixin, View):
@@ -73,17 +83,25 @@ class ReserverRoomView(LoginRequiredMixin, View):
         form = ReservationForm(request.POST)
         if form.is_valid():
             reservation = form.save(commit=False)
-            reservation.user = request.user
+            reservation.created_by = request.user
             reservation.room_id = room_id
             reservation.save()
-            return render(request, "confirmation_page.html", {"room_name": room_name})
+            return redirect("confirmation_reservation", reservation_id=reservation.id)
+
         return render(
             request, "reserver_room.html", {"form": form, "room_name": room_name}
         )
 
 
-class ConfirmationPageView(View):
-    def get(self, request, room_name):
+class ConfirmationReservationView(View):
+    def get(self, request, reservation_id):
+        reservation = get_object_or_404(
+            Reservation, id=reservation_id, created_by=request.user
+        )
+        # Récupérer le nom de la salle réservée
+        room_name = reservation.room.name
+
+        # Afficher la page de confirmation avec le nom de la salle
         return render(request, "confirmation_page.html", {"room_name": room_name})
 
 
@@ -93,7 +111,7 @@ class NewRoomView(LoginRequiredMixin, View):
         return render(request, "new_room.html", {"form": form})
 
     def post(self, request):
-        form = RoomForm(request.POST)
+        form = RoomForm(request.POST, request.FILES)
         if form.is_valid():
             room = form.save(commit=False)
             room.save()
@@ -103,10 +121,15 @@ class NewRoomView(LoginRequiredMixin, View):
 
 class ListReservationsView(LoginRequiredMixin, View):
     def get(self, request):
-        user_reservations = Reservation.objects.all()
-        return render(
-            request, "list_reservations.html", {"reservation": user_reservations}
+        user_reservations = Reservation.objects.filter(
+            created_by=request.user, is_delete=False
         )
+
+        # pagination
+        paginator_reservation = Paginator(user_reservations, 5)
+        page_number = request.GET.get("page")
+        page_obj = paginator_reservation.get_page(page_number)
+        return render(request, "list_reservations.html", {"page_obj": page_obj})
 
 
 class UserHistoryView(TemplateView):
@@ -114,12 +137,19 @@ class UserHistoryView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 'user_request_history' est supposé être ajouté au contexte par le middleware
-        context["user_history"] = self.request.user.request_history.all()
+
+        # Récupérer l'historique des faits de l'utilisateur
+        user_history = self.request.user.request_history.all()
+
+        # piginer l'histoirique
+        paginator = Paginator(user_history, 10)  # 10 éléments par page
+
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        # Ajouter la pagination à ton contexte
+        context["page_obj"] = page_obj
         return context
-
-
-# modification de la reservation
 
 
 class ModifyReservationView(UpdateView):
@@ -130,13 +160,25 @@ class ModifyReservationView(UpdateView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
-        # on redirige
 
     def get_success_url(self):
         return reverse("list_reservations")
 
 
-# pour la suppresion
+class DeleteReservationView(View):
+    def post(self, request, pk):
+        # recuperation
+        reservation = get_object_or_404(
+            Reservation, pk=pk, created_by=request.user, is_delete=False
+        )
+
+        # on bascule is_delete en true
+        reservation.is_delete = True
+        reservation.deleted_at = timezone.now()
+        reservation.save()
+
+        # Rediriger vers la liste des réservations
+        return redirect("list_reservations")
 
 
 class ConfirmDeleteReservationView(View):
@@ -146,26 +188,11 @@ class ConfirmDeleteReservationView(View):
         )
         return render(request, "confirm_delete.html", {"reservation": reservation})
 
-
-class DeleteReservationView(View):
     def post(self, request, pk):
         reservation = get_object_or_404(
             Reservation, pk=pk, created_by=request.user, is_delete=False
         )
-        # on change le statu de is_delete
         reservation.is_delete = True
         reservation.deleted_at = timezone.now()
         reservation.save()
         return redirect("list_reservations")
-
-
-# pour le middleware
-
-# class UserHistoryView(TemplateView):
-#     template_name = 'user_history.html'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         # Récupère l'historique des actions de l'utilisateur authentifié
-#         context['user_history'] = UserRequestHistory.objects.filter(created_by=self.request.user).order_by('-created_at')
-#         return context

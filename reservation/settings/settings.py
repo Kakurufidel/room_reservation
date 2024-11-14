@@ -1,4 +1,5 @@
 from datetime import timedelta
+import os
 
 """
 Django settings for reservation project.
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     # 'rest_framework_simplejwt'
     "rest_framework",
     "rest_framework.authtoken",
+    "silk",
 ]
 
 REST_FRAMEWORK = {
@@ -75,6 +77,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "reservation.apps.authentication.middleware.UserRequestHistoryMiddleware",
+    "silk.middleware.SilkyMiddleware",
 ]
 
 ROOT_URLCONF = "reservation.urls"
@@ -92,6 +95,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "reservation.apps.core.context_processor.user_reservations_context",
                 "reservation.apps.core.context_processor.user_request_history",
+                "reservation.apps.authentication.context_processors.user_info",
             ],
         },
     },
@@ -152,10 +156,14 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "authentication.User"
+SESSION_COOKIE_AGE = 1800
 
 
-STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-MEDIA_ROOT = BASE_DIR / "images"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
+
+LOGIN_URL = "login"
 from .local_settings import *

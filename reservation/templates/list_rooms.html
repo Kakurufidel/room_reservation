@@ -1,22 +1,87 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Liste des salles de reunion{% endblock %}
+{% block title %}Liste des salles de réunion{% endblock %}
 
 {% block content %}
-<h2>Nos salles</h2>
-<div class="row">
-    {% for room in rooms %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{{ room.name }}</h5>
-                    <p class="card-text">Prix : {{ room.price }} €</p>
-                    <a href="{% url 'reserver_room' room.id room.name %}" class="btn btn-primary">Réserver</a>
-                </div>
+<main class="main">
+
+    <!-- Hero Section with Full-Screen Background Image and Navbar -->
+
+    <section id="hero" class="hero section dark-background">
+        <img src="{% static 'reservation/assets/img/hero-bg.jpg' %}" alt="" data-aos="">
+
+        <div class="container">
+            <div class="row">
+              <div class="col-lg-10">
+                <h2 data-aos="fade-up" data-aos-delay="100">bienevenu sur notre site/h2>
+                <p data-aos="fade-up" data-aos-delay="200">nous sommes un ensemble de jeunes formes pour repondre a tout besoin lie a la location des salles de reunions de tout genre</p>
+              </div>
+              <div class="col-lg-5" data-aos="fade-up" data-aos-delay="300">
+                <form action="forms/newsletter.php" method="post" class="php-email-form">
+                  <div class="sign-up-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+    </section>
+
+    <!-- Rooms Section (after Hero Section) -->
+    <section id="rooms-section" class="rooms-section py-5">
+
+        <div class="container">
+            <h2 class="text-center mb-4">Nos Salles</h2>
+            <div class="row">
+                {% for room in page_obj %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="{{ room.image_room.url }}" class="card-img-top" alt="{{ room.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ room.name }}</h5>
+                                <p class="card-text">Prix : {{ room.price }} €</p>
+                                <p class="card-text">Localisation : {{ room.locate }}</p>
+                                <p> nombre de reservation :
+                                    {% if room.reservation_count > 0 %}
+                                         {{ room.reservation_count }}
+                                    {% else %}
+                                        Aucune réservation
+                                    {% endif %}
+                                    <p>
+                                <a href="{% url 'reserver_room' room.id room.name %}" class="btn btn-primary">Réserver</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Aucune salle n'est disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination mt-4 text-center">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; première</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                    <div class="col-lg-2 col-6 footer-links">
+                        <a href="?page={{ page_obj.next_page_number }}">suivante</a>
+                        <p>||</p>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">dernière </a>
+                    </div>
+                    {% endif %}
+                </span>
             </div>
         </div>
-    {% empty %}
-        <p>Aucune chambre disponible pour le moment.</p>
-    {% endfor %}
-</div>
+    </section>
+</main>
 {% endblock %}
