@@ -16,9 +16,11 @@ from reservation.apps.authentication.views import (
     ConfirmDeleteReservationView,
     ConfirmationReservationView,
 )
+from django.views.i18n import set_language
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
     path("login/", LoginView.as_view(), name="login"),
     path("signup/", RegistrationView.as_view(), name="register"),
     path("", ListRoomsView.as_view(), name="list_rooms"),
@@ -53,7 +55,9 @@ urlpatterns = [
         DeleteReservationView.as_view(),
         name="delete_reservation",
     ),
+    path("set-language/", set_language, name="set_language"),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

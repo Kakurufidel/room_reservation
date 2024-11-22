@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% load i18n %}
 <nav> <li class="nav-item active">
-  <a class="nav-link" href="{% url 'new_room' %}">Creer une Salle</a>
+  <a class="nav-link" href="{% url 'new_room' %}">{% trans 'Creer une Salle'%}</a>
 </li>
 </nav>
-{% block title %}Nouvelle Salle{% endblock %}
+{% block title %}{% trans 'Nouvelle Salle'%}{% endblock %}
 {% block content %}
-<h1>Nouvelle Salle</h1>
+<h1>{% trans 'Nouvelle Salle'%}</h1>
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
    {{ form.as_p }}
-  <button type="submit" class="form-control btn btn-primary">Ajouter</button>
+  <button type="submit" class="form-control btn btn-primary">{% trans 'Ajouter'%}</button>
 </form>
 {% endblock %}

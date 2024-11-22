@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Historique des actions{% endblock %}
+{% load i18n%}
+{% block title %}{% trans 'Historique des actions'%}{% endblock %}
 
 {% block content %}
-    <h1>Historique des actions</h1>
+    <h1>{% trans "Historique des actions"%}</h1>
 
     <ol>
         {% if page_obj %}
             {% for action in page_obj %}
                 <li>
-                    Action: {{ action.path }}<br>
-                    heure: {{ action.timestamp }}
+                    {% trans 'Action:'%} {{ action.path }}<br>
+                    {% trans 'heure:'%} {{ action.timestamp }}
                 </li>
             {% endfor %}
         {% else %}
-            <li>Aucune action enregistrée pour le moment.</li>
+            <li>{% trans 'Aucune action enregistrée pour le moment.'%}</li>
         {% endif %}
     </ol>
 
@@ -22,8 +22,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; Première</a>
-                <a href="?page={{ page_obj.previous_page_number }}" class="text-sm-left">Précédente</a>
+                <a href="?page=1">&laquo;{% trans "Première"%} </a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="text-sm-left">{% trans "Précédente"%}</a>
             {% endif %}
 
             <span class="current">
@@ -31,8 +31,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="">Suivante</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Dernière &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}" class="">{% trans "Suivante"%}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">{% trans "Dernière "%}&raquo;</a>
             {% endif %}
         </span>
     </div>

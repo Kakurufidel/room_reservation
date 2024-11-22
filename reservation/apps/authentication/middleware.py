@@ -8,24 +8,22 @@ class UserRequestHistoryMiddleware:
 
     def __call__(self, request):
         if request.user.is_authenticated:
-            action_type = None
-            # Déterminez ici le type d'action (création, modification, suppression, etc.)
+            action = None
+            # le type d'action suppression
             # Par exemple :
             if request.method == "POST" and "edit" in request.path:
-                action_type = "update"
+                action = "update"
             elif request.method == "POST" and "delete" in request.path:
-                action_type = "delete"
+                action = "delete"
             elif request.method == "POST" and "create" in request.path:
-                action_type = "create"
+                action = "create"
 
-            # Créez un enregistrement d'historique avec action_type
-            if action_type:
+            # Créez un enregistrement d'historique avec action
+            if action:
                 UserRequestHistory.objects.create(
-                    path=request.path,
-                    user=request.user,
-                    action_type=action_type,
+                    path=request.path, user=request.user, action=action
                 )
-            print(f"User {request.user.username} performed {action_type} at {now()}")
+            print(f"User {request.user.username} performed {action} at {now()}")
 
         response = self.get_response(request)
         return response

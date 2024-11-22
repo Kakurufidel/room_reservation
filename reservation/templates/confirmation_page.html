@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
+{% load i18n %}
     {% block title %}
-    <title>Confirmation de Réservation</title>
+    <title>{% trans 'Confirmation de Réservation'%}</title>
     {% endblock %}
 </head>
 
 <body>
     {% block content %}
-    <h1>Réservation confirmée</h1>
-    <p>Vous avez réservé la salle {{ room_name }}.</p>
+    <h1>{% trans 'Réservation confirmée'%}</h1>
+    <p>{% trans 'Vous avez réservé la salle '%}{{ room_name }}.</p>
 
     <!-- Redirection directe après 3 secondes -->
     <meta http-equiv="refresh" content="3;url={% url 'list_reservations' %}">
-    <p>merci pour la reservation</p>
+    <p>{% trans 'merci pour la reservation'%}</p>
     {% endblock %}
 </body>
 </html>

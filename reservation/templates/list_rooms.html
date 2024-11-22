@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Liste des salles de réunion{% endblock %}
+{% block title %}{% trans 'Liste des salles de réunion'%}{% endblock %}
 
 {% block content %}
 <main class="main">
@@ -14,19 +15,12 @@
         <div class="container">
             <div class="row">
               <div class="col-lg-10">
-                <h2 data-aos="fade-up" data-aos-delay="100">bienevenu sur notre site/h2>
-                <p data-aos="fade-up" data-aos-delay="200">nous sommes un ensemble de jeunes formes pour repondre a tout besoin lie a la location des salles de reunions de tout genre</p>
+                <h2 data-aos="fade-up" data-aos-delay="100">{% trans 'bienevenu sur notre site'%}</h2>
+                <p data-aos="fade-up" data-aos-delay="200">{% trans 'nous sommes un ensemble de jeunes formes pour repondre'%} a tout besoin lie a la location des salles de reunions de tout genre</p>
               </div>
-              <div class="col-lg-5" data-aos="fade-up" data-aos-delay="300">
-                <form action="forms/newsletter.php" method="post" class="php-email-form">
-                  <div class="sign-up-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-                </form>
-              </div>
+
             </div>
-          </div>
+         </div>
 
     </section>
 
@@ -34,7 +28,7 @@
     <section id="rooms-section" class="rooms-section py-5">
 
         <div class="container">
-            <h2 class="text-center mb-4">Nos Salles</h2>
+            <h2 class="text-center mb-4">{% trans "Nos Salles"%}</h2>
             <div class="row">
                 {% for room in page_obj %}
                     <div class="col-md-4">
@@ -42,21 +36,22 @@
                             <img src="{{ room.image_room.url }}" class="card-img-top" alt="{{ room.name }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ room.name }}</h5>
-                                <p class="card-text">Prix : {{ room.price }} €</p>
-                                <p class="card-text">Localisation : {{ room.locate }}</p>
-                                <p> nombre de reservation :
+                                <p class="card-text"> {% trans 'Prix'%} : {{ room.price }} €</p>
+                                <p class="card-text">{% trans 'Localisation '%}: {{ room.locate }}</p>
+                                <p> {% trans "nombre de reservation"%} :
                                     {% if room.reservation_count > 0 %}
                                          {{ room.reservation_count }}
                                     {% else %}
-                                        Aucune réservation
+                                    {% trans "Aucune réservation"%}
+
                                     {% endif %}
                                     <p>
-                                <a href="{% url 'reserver_room' room.id room.name %}" class="btn btn-primary">Réserver</a>
+                                <a href="{% url 'reserver_room' room.id room.name %}" class="btn btn-primary">{% trans 'Réserver'%}</a>
                             </div>
                         </div>
                     </div>
                 {% empty %}
-                    <p>Aucune salle n'est disponible pour le moment.</p>
+                    <p>{% trans "Aucune salle n'est disponible pour le moment."%}</p>
                 {% endfor %}
             </div>
 
@@ -64,19 +59,19 @@
             <div class="pagination mt-4 text-center">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; première</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
+                        <a href="?page=1">&laquo; {% trans 'première'%}</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">{% trans 'précédente'%}</a>
                     {% endif %}
 
                     <span class="current">
-                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                        {% trans 'Page '%}{{ page_obj.number }}  {% trans 'sur'%} {{ page_obj.paginator.num_pages }}
                     </span>
 
                     {% if page_obj.has_next %}
                     <div class="col-lg-2 col-6 footer-links">
-                        <a href="?page={{ page_obj.next_page_number }}">suivante</a>
+                        <a href="?page={{ page_obj.next_page_number }}"> {% trans 'suivante'%} </a>
                         <p>||</p>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">dernière </a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">{% trans 'dernière' %} </a>
                     </div>
                     {% endif %}
                 </span>

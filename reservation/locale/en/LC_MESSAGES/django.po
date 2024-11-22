@@ -1,0 +1,333 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-20 12:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: reservation/apps/authentication/templates/base_auth.html:47
+#: reservation/templates/base.html:47
+msgid "Liste des Salles"
+msgstr "rooms list"
+
+#: reservation/apps/authentication/templates/base_auth.html:50
+#: reservation/templates/base.html:50
+msgid "Réservations"
+msgstr "reservations"
+
+#: reservation/apps/authentication/templates/base_auth.html:53
+#: reservation/templates/base.html:53
+msgid "Historique"
+msgstr "history"
+
+#: reservation/apps/authentication/templates/base_auth.html:58
+#: reservation/templates/base.html:61
+msgid "Déconnexion"
+msgstr "logout"
+
+#: reservation/apps/authentication/templates/base_auth.html:75
+#: reservation/apps/authentication/templates/login.html:4
+#: reservation/apps/authentication/templates/login.html:6
+#: reservation/templates/base.html:66
+msgid "Connexion"
+msgstr "login"
+
+#: reservation/apps/authentication/templates/base_auth.html:78
+#: reservation/apps/authentication/templates/login.html:37
+#: reservation/apps/authentication/templates/register.html:65
+#: reservation/templates/base.html:69
+msgid "S'inscrire"
+msgstr "sing up"
+
+#: reservation/apps/authentication/templates/login.html:16
+#: reservation/apps/authentication/templates/register.html:18
+msgid "Noms"
+msgstr "names"
+
+#: reservation/apps/authentication/templates/login.html:23
+#: reservation/apps/authentication/templates/register.html:49
+msgid "Mot de passe"
+msgstr "password"
+
+#: reservation/apps/authentication/templates/login.html:33
+msgid "Se connecter"
+msgstr "connection"
+
+#: reservation/apps/authentication/templates/login.html:37
+#: reservation/apps/authentication/templates/register.html:69
+msgid "Vous avez déjà un compte ?"
+msgstr "have a account"
+
+#: reservation/apps/authentication/templates/register.html:25
+msgid "profession"
+msgstr "job"
+
+#: reservation/apps/authentication/templates/register.html:32
+msgid "Adresse"
+msgstr "adress"
+
+#: reservation/apps/authentication/templates/register.html:41
+msgid "Adresse mail"
+msgstr "mail"
+
+#: reservation/apps/authentication/templates/register.html:56
+msgid "Confirmation de mot de passe"
+msgstr "confirm your password"
+
+#: reservation/apps/authentication/templates/register.html:69
+msgid "Connectez-vous."
+msgstr "login"
+
+#: reservation/apps/authentication/views.py:36
+msgid "Inscription réussie. Vous pouvez maintenant vous connecter."
+msgstr "success you can login"
+
+#: reservation/apps/authentication/views.py:58
+msgid "Nom d’utilisateur ou mot de passe incorrect."
+msgstr "invalid name or password"
+
+#: reservation/settings/settings.py:146
+msgid "English"
+msgstr ""
+
+#: reservation/settings/settings.py:147
+msgid "French"
+msgstr ""
+
+#: reservation/templates/confirm_delete.html:4
+msgid "Suppression"
+msgstr "deleteting"
+
+#: reservation/templates/confirm_delete.html:8
+#: reservation/templates/confirm_delete.html:13
+#: reservation/templates/list_reservations.html:20
+msgid "Supprimer"
+msgstr "delete"
+
+#: reservation/templates/confirm_delete.html:9
+msgid "Êtes-vous sûr de vouloir supprimer la réservation pour"
+msgstr "sure to delete"
+
+#: reservation/templates/confirm_delete.html:10
+msgid "Du "
+msgstr "from"
+
+#: reservation/templates/confirm_delete.html:10
+#: reservation/templates/list_reservations.html:17
+msgid "au"
+msgstr "at"
+
+#: reservation/templates/confirm_delete.html:14
+#: reservation/templates/modify_reservation.html:26
+msgid "Annuler"
+msgstr "annul"
+
+#: reservation/templates/confirmation_page.html:4
+msgid "Confirmation de Réservation"
+msgstr "reservation confirm"
+
+#: reservation/templates/confirmation_page.html:10
+msgid "Réservation confirmée"
+msgstr "reservation confirm"
+
+#: reservation/templates/confirmation_page.html:11
+msgid "Vous avez réservé la salle "
+msgstr "you have reserve"
+
+#: reservation/templates/confirmation_page.html:15
+msgid "merci pour la reservation"
+msgstr "thanx you"
+
+#: reservation/templates/list_reservations.html:6
+msgid "Liste de Réservations"
+msgstr "reservation list"
+
+#: reservation/templates/list_reservations.html:10
+msgid "Liste des Réservations"
+msgstr "reservation list"
+
+#: reservation/templates/list_reservations.html:12
+msgid "Total des réservations"
+msgstr "reservation total"
+
+#: reservation/templates/list_reservations.html:17
+msgid "du"
+msgstr "from"
+
+#: reservation/templates/list_reservations.html:19
+msgid "Modifier"
+msgstr "modify"
+
+#: reservation/templates/list_reservations.html:24
+msgid "Aucune réservation trouvée."
+msgstr "empty"
+
+#: reservation/templates/list_reservations.html:31
+#: reservation/templates/user_history.html:25
+msgid "Première"
+msgstr "first"
+
+#: reservation/templates/list_reservations.html:32
+#: reservation/templates/user_history.html:26
+msgid "Précédente"
+msgstr "preuv"
+
+#: reservation/templates/list_reservations.html:36
+msgid "Page"
+msgstr "page"
+
+#: reservation/templates/list_reservations.html:36
+#: reservation/templates/list_rooms.html:67
+msgid "sur"
+msgstr "/"
+
+#: reservation/templates/list_reservations.html:40
+#: reservation/templates/user_history.html:34
+msgid "Suivante"
+msgstr "next"
+
+#: reservation/templates/list_reservations.html:41
+msgid "Dernière"
+msgstr "last"
+
+#: reservation/templates/list_rooms.html:5
+msgid "Liste des salles de réunion"
+msgstr "rooms meetings list"
+
+#: reservation/templates/list_rooms.html:18
+msgid "bienevenu sur notre site"
+msgstr "welcome"
+
+#: reservation/templates/list_rooms.html:19
+msgid "nous sommes un ensemble de jeunes formes pour repondre"
+msgstr "we are young and we like to answer you"
+
+#: reservation/templates/list_rooms.html:31
+msgid "Nos Salles"
+msgstr "our rooms"
+
+#: reservation/templates/list_rooms.html:39
+msgid "Prix"
+msgstr "prices"
+
+#: reservation/templates/list_rooms.html:40
+msgid "Localisation "
+msgstr "localisation"
+
+#: reservation/templates/list_rooms.html:41
+msgid "nombre de reservation"
+msgstr "numbre of reservation"
+
+#: reservation/templates/list_rooms.html:45
+msgid "Aucune réservation"
+msgstr "empty"
+
+#: reservation/templates/list_rooms.html:49
+#: reservation/templates/reserver_room.html:27
+msgid "Réserver"
+msgstr "reserve"
+
+#: reservation/templates/list_rooms.html:54
+msgid "Aucune salle n'est disponible pour le moment."
+msgstr "anny disponible"
+
+#: reservation/templates/list_rooms.html:62
+msgid "première"
+msgstr "fisrt"
+
+#: reservation/templates/list_rooms.html:63
+msgid "précédente"
+msgstr "preuv"
+
+#: reservation/templates/list_rooms.html:67
+msgid "Page "
+msgstr "page"
+
+#: reservation/templates/list_rooms.html:72
+msgid "suivante"
+msgstr "next"
+
+#: reservation/templates/list_rooms.html:74
+msgid "dernière"
+msgstr "last"
+
+#: reservation/templates/modify_reservation.html:5
+#: reservation/templates/modify_reservation.html:9
+msgid "Modifier la Réservation"
+msgstr "modify"
+
+#: reservation/templates/modify_reservation.html:14
+msgid "Salle"
+msgstr "room"
+
+#: reservation/templates/modify_reservation.html:18
+#: reservation/templates/reserver_room.html:19
+msgid "Date de Début"
+msgstr "date"
+
+#: reservation/templates/modify_reservation.html:22
+#: reservation/templates/reserver_room.html:23
+msgid "Date de Fin"
+msgstr "date end"
+
+#: reservation/templates/modify_reservation.html:25
+msgid "modifier"
+msgstr "modify"
+
+#: reservation/templates/new_room.html:4
+msgid "Creer une Salle"
+msgstr ""
+
+#: reservation/templates/new_room.html:7 reservation/templates/new_room.html:9
+msgid "Nouvelle Salle"
+msgstr "news room"
+
+#: reservation/templates/new_room.html:13
+msgid "Ajouter"
+msgstr "add"
+
+#: reservation/templates/reserver_room.html:3
+msgid "Réserver une Salle"
+msgstr ""
+
+#: reservation/templates/reserver_room.html:8
+msgid "Réserver la Salle"
+msgstr "reservation room"
+
+#: reservation/templates/reserver_room.html:13
+msgid "Vous réservez la salle"
+msgstr "goog room reserve"
+
+#: reservation/templates/user_history.html:3
+#: reservation/templates/user_history.html:6
+msgid "Historique des actions"
+msgstr "history"
+
+#: reservation/templates/user_history.html:12
+msgid "Action:"
+msgstr "anction"
+
+#: reservation/templates/user_history.html:13
+msgid "heure:"
+msgstr "hours"
+
+#: reservation/templates/user_history.html:17
+msgid "Aucune action enregistrée pour le moment."
+msgstr "empy"
+
+#: reservation/templates/user_history.html:35
+msgid "Dernière "
+msgstr "last"

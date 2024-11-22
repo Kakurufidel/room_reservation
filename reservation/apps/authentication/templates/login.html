@@ -1,8 +1,9 @@
 {% extends 'base_auth.html' %}
+{% load i18n %}
 {% load widget_tweaks %}
-{% block title %}Connexion{% endblock %}
+{% block title %} {% trans "Connexion"%} {% endblock %}
 {% block content %}
-    <h2 class="text-center aos-init aos-animate"data-aos="fade-up" data-aos-delay="100">Connexion</h2>
+    <h2 class="text-center aos-init aos-animate"data-aos="fade-up" data-aos-delay="100">{% trans "Connexion"%}</h2>
     <div class="wd-30 mx-auto d-flex justify-content-center">
         <form method="POST" class="wd-30 mx-auto">
             {% csrf_token %}
@@ -12,14 +13,14 @@
 
               <div class="col-md-6 mb-4">
                     <div data-mdb-input-init class="form-outline">
-                    <label class="form-label" for="id_name">Noms</label>
+                    <label class="form-label" for="id_name">{% trans "Noms"%}</label>
                     {% render_field form.username class="form-control " %}
                     <small class="invalid-feedback">{{ form.errors.name }}</small>
                     </div>
               </div>
             <div class="col-md-6 mb-4">
                 <div data-mdb-input-init class="form-outline mb-4">
-                <label class="form-label" for="form3Example4">Mot de passe</label>
+                <label class="form-label" for="form3Example4">{% trans "Mot de passe"%}</label>
                 {% render_field form.password class="form-control" %}
                 <small class="invalid-feedback">{{ form.errors.password }}</small>
                 </div>
@@ -29,11 +30,11 @@
 
 
             <button type="submit" class="btn btn-primary btn-block mb-4">
-              Se connecter
+              {% trans "Se connecter" %}
             </button>
 
             <div>
-              <p>Vous avez déjà un compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+              <p>{% trans "Vous avez déjà un compte ?"%} <a href="{% url 'register' %}">{% trans "S'inscrire" %}</a></p>
             </div>
         </form>
 

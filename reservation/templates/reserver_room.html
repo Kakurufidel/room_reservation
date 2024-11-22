@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Réserver une Salle{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Réserver une Salle"%}{% endblock %}
 
 {% load widget_tweaks %}
 
 {% block content %}
-<h1>Réserver la Salle {{ room_name }}</h1>
+<h1>{% trans "Réserver la Salle"%} {{ room_name }}</h1>
 
 <form method="POST" class="text-lowercase w-50 p-b-5 position-relative mx-auto">
   {% csrf_token %}
 
-  <p>Vous réservez la salle <strong>{{ room_name }}</strong> :</p>
+  <p> {% trans "Vous réservez la salle"%} <strong>{{ room_name }}</strong> :</p>
 
   <!-- Champ de la salle (caché ou désactivé) -->
   <input type="hidden" name="room" value="{{ room_id }}" />
 
-  <!-- Champ de la date de début -->
-  <div class="form-group">
-    <label for="{{ form.date_start.id_for_label }}">{{ form.date_start.label }}</label>
-    {% render_field form.date_start class="form-control" %}
-  </div>
+<div class="mb-3">
+    <label for="date_start" class="form-label">{% trans "Date de Début"%}</label>
+    <input type="datetime-local" class="form-control" id="date_start" name="date_start" value="{{ reservation.date_start|date:'Y-m-d\TH:i' }}" required>
+</div>
+<div class="mb-3">
+    <label for="date_end" class="form-label">{% trans 'Date de Fin'%}</label>
+    <input type="datetime-local" class="form-control" id="date_end" name="date_end" value="{{ reservation.date_end|date:'Y-m-d\TH:i' }}" required>
+</div>
 
-  <!-- Champ de la date de fin -->
-  <div class="form-group">
-    <label for="{{ form.date_end.id_for_label }}">{{ form.date_end.label }}</label>
-    {% render_field form.date_end class="form-control" %}
-    </div>
-
-  <button type="submit" class="form-control btn btn-primary">Réserver</button>
+  <button type="submit" class="form-control btn btn-primary">{% trans "Réserver"%}</button>
 </form>
 {% endblock %}

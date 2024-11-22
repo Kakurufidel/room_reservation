@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.utils.translation import gettext as _
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,7 +13,13 @@ from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Count
-from .models import UserRequestHistory
+from django.conf import settings
+
+# fonction pour la traduction
+# def translate_text(text, target_language):
+#     client = translate.Client()
+#     result = client.translate(text, target_language=target_language)
+#     return result['translatedText']
 
 
 class RegistrationView(View):
@@ -25,7 +32,8 @@ class RegistrationView(View):
         if form.is_valid():
             form.save()
             messages.success(
-                request, "Inscription réussie. Vous pouvez maintenant vous connecter."
+                request,
+                _("Inscription réussie. Vous pouvez maintenant vous connecter."),
             )
             return redirect("login")
         return render(request, "register.html", {"form": form})
@@ -46,7 +54,9 @@ class LoginView(View):
                 login(request, user)
                 return redirect("list_rooms")
             else:
-                messages.error(request, "Nom d’utilisateur ou mot de passe incorrect.")
+                messages.error(
+                    request, _("Nom d’utilisateur ou mot de passe incorrect.")
+                )
         return render(request, "login.html", {"form": form})
 
 
@@ -54,6 +64,10 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect("login")
+
+        """
+        Traite le formulaire de changement de langue et redirige l'utilisateur.
+        """
 
 
 class ListRoomsView(LoginRequiredMixin, View):

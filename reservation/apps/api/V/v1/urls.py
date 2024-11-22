@@ -1,14 +1,12 @@
-from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
-from .views import RegisterView, LogoutView
-from .views import RoomListAPI, ModifierRoomAPI, DeleteRoomAPI, ReserverRoom
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from .views import RoomViewSet, ReservationViewSet, UserRequestHistoryViewSet
+
+router = DefaultRouter()
+router.register(r"rooms", RoomViewSet, basename="rooms")
+router.register(r"reservations", ReservationViewSet, basename="reservations")
+router.register(r"history", UserRequestHistoryViewSet, basename="history")
 
 urlpatterns = [
-    path("register/", RegisterView.as_view(), name="register"),
-    path("login/", obtain_auth_token, name="login"),
-    path("logout/", LogoutView.as_view(), name="api_logout"),
-    path("api/rooms/", RoomListAPI.as_view(), name="room_list_api"),
-    path("api/rooms/<int:pk>/", ModifierRoomAPI.as_view(), name="modifier_room_api"),
-    path("api/rooms/<int:pk>/delete/", DeleteRoomAPI.as_view(), name="delete_room_api"),
-    path("api/V1/reservation/", ReserverRoom.as_view(), name="reserver_room_api"),
+    path("", include(router.urls)),
 ]

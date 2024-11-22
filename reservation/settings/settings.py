@@ -1,5 +1,7 @@
 from datetime import timedelta
 import os
+from django.utils.translation import gettext_lazy as _
+
 
 """
 Django settings for reservation project.
@@ -41,15 +43,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_bootstrap5",
+    "django_filters",
     "reservation",
     "active_link",
     "widget_tweaks",
     "reservation.apps.authentication",
-    # 'rest_framework_simplejwt'
     "rest_framework",
+    "rest_framework_simplejwt",
     "rest_framework.authtoken",
     "silk",
 ]
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -57,6 +61,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
 }
 # SIMPLE_JWT = {
 #     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
@@ -70,6 +77,7 @@ AUTH_USER_MODEL = "authentication.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -91,6 +99,8 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
+                "reservation.apps.authentication.context_processors.language_context",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "reservation.apps.core.context_processor.user_reservations_context",
@@ -137,14 +147,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+]
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+LANGUAGE_CODE = "fr-fr"
 
 TIME_ZONE = "UTC"
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -163,6 +179,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# tradution
 
 
 LOGIN_URL = "login"
