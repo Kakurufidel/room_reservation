@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+
+<section id="hero" class="hero section dark-background">
+    <!-- Image de fond -->
+    <img class="hero-bg" src="{% static 'reservation/assets/img/hero-bg.jpg' %}" alt="" data-aos="">
+
+    <!-- Texte centré sur l'image -->
+    <div class="container">
+        <div class="hero-text">
+            <h2>{% trans "bienvenu sur le site de reservation de salle de reuniion"%} </h2>
+            <p>{% trans "vous avez besoin d'une salle avec des carasteristiques ordinaire ? ou ppour une grande conferation euh bien nous sommes la pour vous"%}</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

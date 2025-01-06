@@ -15,6 +15,14 @@ from reservation.apps.authentication.views import (
     DeleteReservationView,
     ConfirmDeleteReservationView,
     ConfirmationReservationView,
+    HomeView,
+    AdminDashboardView,
+    CreateRoomView,
+    RoomListView,
+    RoomUpdateView,
+    UserListView,
+    RoomDeleteView,
+    ReservationListAdminView,
 )
 from django.views.i18n import set_language
 
@@ -23,8 +31,9 @@ urlpatterns = [
     # path("admin/", admin.site.urls),
     path("login/", LoginView.as_view(), name="login"),
     path("signup/", RegistrationView.as_view(), name="register"),
-    path("", ListRoomsView.as_view(), name="list_rooms"),
+    path("list_rooms", ListRoomsView.as_view(), name="list_rooms"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("", HomeView.as_view(), name="index"),
     path(
         "reservation/<int:room_id>/<str:room_name>/",
         ReserverRoomView.as_view(),
@@ -56,6 +65,17 @@ urlpatterns = [
         name="delete_reservation",
     ),
     path("set-language/", set_language, name="set_language"),
+    path("admin-dashboard/", AdminDashboardView.as_view(), name="admin_dashboard"),
+    path("create/", CreateRoomView.as_view(), name="create_room"),
+    path("list/", RoomListView.as_view(), name="list_rooms_admin"),
+    path("update/<int:pk>/", RoomUpdateView.as_view(), name="update_room"),
+    path("delete/<int:pk>/", RoomDeleteView.as_view(), name="delete_room"),
+    path("users/", UserListView.as_view(), name="user_list"),
+    path(
+        "list_reservations_admin/",
+        ReservationListAdminView.as_view(),
+        name="list_reservations_admin",
+    ),
 ]
 
 

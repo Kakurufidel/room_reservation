@@ -1,41 +1,45 @@
 {% extends 'base_auth.html' %}
 {% load i18n %}
 {% load widget_tweaks %}
-{% block title %} {% trans "Connexion"%} {% endblock %}
+
+{% block title %} {% trans "Connexion" %} {% endblock %}
+
 {% block content %}
-    <h2 class="text-center aos-init aos-animate"data-aos="fade-up" data-aos-delay="100">{% trans "Connexion"%}</h2>
-    <div class="wd-30 mx-auto d-flex justify-content-center">
-        <form method="POST" class="wd-30 mx-auto">
-            {% csrf_token %}
+<div class="container d-flex justify-content-center align-items-center vh-100" style="margin-top: 80px;">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
 
+        <form method="POST" class="needs-validation" novalidate>
+            <h2 class="text-center mb-4" data-aos="fade-up" data-aos-delay="100">
+            {% trans "Connexion" %}
+        </h2>
+        {% csrf_token %}
             {% with WIDGET_ERROR_CLASS='is-invalid' %}
-            <!-- 2 column grid layout with text inputs for the first and last names -->
-
-              <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline">
-                    <label class="form-label" for="id_name">{% trans "Noms"%}</label>
-                    {% render_field form.username class="form-control " %}
-                    <small class="invalid-feedback">{{ form.errors.name }}</small>
-                    </div>
-              </div>
-            <div class="col-md-6 mb-4">
-                <div data-mdb-input-init class="form-outline mb-4">
-                <label class="form-label" for="form3Example4">{% trans "Mot de passe"%}</label>
-                {% render_field form.password class="form-control" %}
-                <small class="invalid-feedback">{{ form.errors.password }}</small>
-                </div>
+            <!-- Champ pour le nom d'utilisateur -->
+            <div class="mb-3">
+                <label for="id_username" class="form-label">{% trans "Nom d'utilisateur" %}</label>
+                {% render_field form.username class="form-control" %}
+                <div class="invalid-feedback">{{ form.errors.username }}</div>
             </div>
-
-            {%  endwith %}
-
-
-            <button type="submit" class="btn btn-primary btn-block mb-4">
-              {% trans "Se connecter" %}
-            </button>
-
-            <div>
-              <p>{% trans "Vous avez déjà un compte ?"%} <a href="{% url 'register' %}">{% trans "S'inscrire" %}</a></p>
+            <!-- Champ pour le mot de passe -->
+            <div class="mb-4">
+                <label for="id_password" class="form-label">{% trans "Mot de passe" %}</label>
+                {% render_field form.password class="form-control" %}
+                <div class="invalid-feedback">{{ form.errors.password }}</div>
+            </div>
+            {% endwith %}
+            <!-- Bouton de soumission -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    {% trans "Se connecter" %}
+                </button>
             </div>
         </form>
-
+        <!-- Lien pour s'inscrire -->
+        <div class="text-center mt-3">
+            <p>{% trans "Vous n'avez pas encore de compte ?" %}
+                <a href="{% url 'register' %}" class="text-decoration-none">{% trans "S'inscrire" %}</a>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

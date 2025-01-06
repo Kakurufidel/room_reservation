@@ -15,12 +15,7 @@ urlpatterns += i18n_patterns(
 )
 
 urlpatterns += [
-    path(
-        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
-    ),  # Obtenir un token JWT
-    path(
-        "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
-    ),  # Rafraîchir un token JWT
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path(
         "api/v1/", include("reservation.apps.api.V.v1.urls")
     ),  # Inclut les routes de ton API

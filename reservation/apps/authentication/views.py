@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from .models import User
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext as _
+from django.http import JsonResponse
+from django.contrib.auth.views import redirect_to_login
+
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +19,10 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.conf import settings
+from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy
+from django.utils.timezone import now
+from django.views.generic import CreateView, ListView
 
 # fonction pour la traduction
 # def translate_text(text, target_language):
@@ -86,24 +95,68 @@ class ListRoomsView(LoginRequiredMixin, View):
         )
 
 
-class ReserverRoomView(LoginRequiredMixin, View):
+class HomeView(TemplateView):
+    template_name = "index.html"
+
+
+class ReserverRoomView(View):
     def get(self, request, room_id, room_name):
+        if not request.user.is_authenticated:
+            messages.error(request, "Vous devez être connecté pour réserver une salle.")
+            return redirect(
+                "login"
+            )  # Remplace 'login' par le nom de ton URL de connexion si nécessaire
         form = ReservationForm()
         return render(
-            request, "reserver_room.html", {"form": form, "room_name": room_name}
+            request,
+            "reserver_room.html",
+            {"form": form, "room_id": room_id, "room_name": room_name},
         )
 
     def post(self, request, room_id, room_name):
+        if not request.user.is_authenticated:
+            messages.error(request, "Vous devez être connecté pour réserver une salle.")
+            return redirect("login")
+
         form = ReservationForm(request.POST)
+
+        # Vérification si la salle est déjà réservée pour la plage horaire demandée
         if form.is_valid():
+            date_start = form.cleaned_data["date_start"]
+            date_end = form.cleaned_data["date_end"]
+
+            # Vérifier les réservations existantes pour la salle
+            existing_reservation = Reservation.objects.filter(
+                room_id=room_id,
+                date_start__lt=date_end,  # Si l'heure de début de la réservation est avant l'heure de fin choisie
+                date_end__gt=date_start,  # Si l'heure de fin de la réservation est après l'heure de début choisie
+            ).exists()
+
+            if existing_reservation:
+                messages.error(
+                    request, "La salle est déjà réservée pour cette date et heure."
+                )
+                return render(
+                    request,
+                    "reserver_room.html",
+                    {"form": form, "room_id": room_id, "room_name": room_name},
+                )
+
+            # Si aucune réservation existante, créer une nouvelle réservation
             reservation = form.save(commit=False)
-            reservation.created_by = request.user
             reservation.room_id = room_id
+            reservation.created_by = (
+                request.user
+            )  # Ajoute l'utilisateur qui a fait la réservation
             reservation.save()
+
+            messages.success(request, "Réservation effectuée avec succès!")
             return redirect("confirmation_reservation", reservation_id=reservation.id)
 
         return render(
-            request, "reserver_room.html", {"form": form, "room_name": room_name}
+            request,
+            "reserver_room.html",
+            {"form": form, "room_id": room_id, "room_name": room_name},
         )
 
 
@@ -210,3 +263,103 @@ class ConfirmDeleteReservationView(View):
         reservation.deleted_at = timezone.now()
         reservation.save()
         return redirect("list_reservations")
+
+
+# cote admin
+
+
+class AdminDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "admin_dashboard.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Vérifie si l'utilisateur est un superutilisateur (administrateur)
+        if not request.user.is_superuser:
+            return (
+                HttpResponseForbidden()
+            )  # Renvoie une erreur 403 si l'utilisateur n'est pas administrateur
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CreateRoomView(CreateView):
+    model = Room
+    form_class = RoomForm
+    template_name = "create_room.html"
+    success_url = reverse_lazy("list_rooms")  # Redirection vers la liste des salles
+
+    def form_valid(self, form):
+        name = form.cleaned_data["name"]
+        locate = form.cleaned_data["locate"]
+
+        if Room.objects.filter(name=name, locate=locate).exists():
+            messages.error(
+                self.request, "Une salle avec ce nom et cet emplacement existe déjà."
+            )
+            return HttpResponseRedirect(self.request.path)
+        # Si la salle n'existe pas déjà, enregistrer la nouvelle salle
+        return super().form_valid(form)
+
+
+class RoomListView(LoginRequiredMixin, ListView):
+    model = Room
+    template_name = "list_room_admin.html"  # Template pour afficher la liste des salles
+    context_object_name = "rooms"  # Le nom de l'objet dans le template
+    paginate_by = 10  # Optionnel : Nombre de salles affichées par page
+
+    def get_queryset(self):
+        # Tu peux personnaliser ici les salles à afficher
+        return Room.objects.filter(deleted_at__isnull=True).order_by(
+            "name"
+        )  # Afficher uniquement les salles actives
+
+
+class RoomUpdateView(LoginRequiredMixin, UpdateView):
+    model = Room
+    fields = ["name", "image_room", "capacity", "price"]
+    template_name = "update_room.html"  # Template pour la modification
+    success_url = reverse_lazy("list_rooms_admin")  # Redirection après succès
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = self.object.name
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, "La salle a été modifiée avec succès.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("list_rooms_admin")
+
+
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = "user_list.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        return User.objects.filter(is_active=True).order_by("username")
+
+
+class RoomDeleteView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        # Récupère la salle et effectue la suppression logique
+        room = get_object_or_404(Room, id=kwargs["pk"])
+        room.deleted_at = now()
+        room.save()
+        # Retourne une réponse JSON
+        return redirect("list_rooms_admin")
+
+
+class ReservationListAdminView(LoginRequiredMixin, ListView):
+    model = Reservation
+    template_name = "list_reservations_admin.html"
+    context_object_name = "reservations"
+
+    def get_queryset(self):
+        return Reservation.objects.select_related("created_by", "room").all()
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return redirect_to_login(self.request.get_full_path())

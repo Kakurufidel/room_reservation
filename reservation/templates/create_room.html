@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <div class="container py-5" style="margin-top: 80px;">
+    <h1 class="text-center mb-4">{% trans "Créer une nouvelle salle" %}</h1>
+
+    <!-- Affichage des messages -->
+    {% if messages %}
+      <div id="error-message" class="alert alert-warning" role="alert">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">{% trans "Nom de la salle" %}</label>
+            {{ form.name }}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.locate.id_for_label }}" class="form-label">{% trans "Emplacement" %}</label>
+            {{ form.locate }}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.image_room.id_for_label }}" class="form-label">{% trans "Image de la salle" %}</label>
+            {{ form.image_room }}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.capacity.id_for_label }}" class="form-label">{% trans "Capacité" %}</label>
+            {{ form.capacity }}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.price.id_for_label }}" class="form-label">{% trans "Prix" %}</label>
+            {{ form.price }}
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">{% trans "Créer" %}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Si un message d'erreur est affiché, on le cache après 3 secondes
+    {% if messages %}
+      setTimeout(function() {
+        const messageElement = document.getElementById('error-message');
+        if (messageElement) {
+          messageElement.style.display = 'none';
+        }
+      }, 3000);  // Disparition après 3 secondes
+    {% endif %}
+  </script>
+
+{% endblock %}

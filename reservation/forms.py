@@ -5,14 +5,13 @@ from .models import Reservation, Room
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
-        fields = ["room", "date_start", "date_end"]
+        fields = ["date_start", "date_end"]  # Les champs visibles
         widgets = {
-            "room": forms.Select(attrs={"class": "form-control"}),
             "date_start": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                attrs={"type": "datetime-local", "class": "form-control"}
             ),
             "date_end": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                attrs={"type": "datetime-local", "class": "form-control"}
             ),
         }
 
@@ -20,9 +19,28 @@ class ReservationForm(forms.ModelForm):
 class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
-        fields = ["name", "locate", "capacity", "image_room"]
-        widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control d-block"}),
-            "locate": forms.TextInput(attrs={"class": "form-control d-block"}),
-            "capacity": forms.NumberInput(attrs={"class": "form-control d-block"}),
-        }
+        fields = ["name", "locate", "capacity", "image_room", "price"]
+
+    widgets = {
+        "name": forms.TextInput(
+            attrs={"class": "form-control d-block", "placeholder": "Nom de la salle"}
+        ),
+        "locate": forms.TextInput(
+            attrs={
+                "class": "form-control d-block",
+                "placeholder": "Emplacement de la salle",
+            }
+        ),
+        "capacity": forms.NumberInput(
+            attrs={
+                "class": "form-control d-block",
+                "placeholder": "Capacité de la salle",
+            }
+        ),
+        "price": forms.TextInput(
+            attrs={"class": "form-control d-block", "placeholder": "Prix de la salle"}
+        ),  # Personnalisation pour le champ `price`
+        "image_room": forms.ClearableFileInput(
+            attrs={"class": "form-control d-block"}
+        ),  # Image de la salle avec un widget personnalisé
+    }

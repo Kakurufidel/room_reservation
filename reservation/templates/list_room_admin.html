@@ -1,0 +1,105 @@
+
+{% extends 'base.html' %}
+
+{% load i18n %}  <!-- Charge le tag i18n pour les traductions -->
+
+{% block title %}
+  {% trans "Liste de Réservations" %}
+{% endblock %}
+
+{% block content %}
+  <!-- Ajout d'un espacement supplémentaire avec mt-6 ou mt-7 pour un espacement plus grand -->
+  <div class="container py-5" style="margin-top: 80px;">
+
+    <h1>{% trans "Liste de salles"%}<h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>{% trans "Nom" %}</th>
+            <th>{% trans "Capacité" %}</th>
+            <th>{% trans "Prix" %}</th>
+            <th>{% trans "Actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.name }}</td>
+            <td>{{ room.capacity }}</td>
+            <td>{{ room.price }}</td>
+            <td>
+                <a href="{% url 'update_room' room.id %}" class="btn btn-warning btn-sm">{% trans "Modifier" %}</a>
+                <!-- Supprimer Button triggers the modal -->
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ room.id }}">
+                    {% trans "Supprimer" %}
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal{{ room.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ room.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ room.id }}">{% trans "Confirmer la suppression" %}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button>
+                            </div>
+                            <div class="modal-body">
+                                {% trans "Êtes-vous sûr de vouloir supprimer cette salle ?" %}
+                                <strong>{{ room.name }}</strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
+                                <form action="{% url 'delete_room' room.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">{% trans "Confirmer" %}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteModal = document.getElementById('deleteModal');
+        let roomId = null;
+
+        // Lorsqu'on ouvre le modal, on récupère l'ID de la salle
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            roomId = button.getAttribute('data-room-id');
+        });
+
+        // Lorsqu'on confirme la suppression
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            if (roomId) {
+                fetch(`/rooms/delete/${roomId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}', // Inclus le token CSRF
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Supprime la salle de l'interface ou recharge la page
+                        window.location.reload();
+                    } else {
+                        alert(data.message || "Une erreur s'est produite.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert("Une erreur s'est produite.");
+                });
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

@@ -1,28 +1,45 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n widget_tweaks %}
 
 {% block title %}
-{% trans 'Modifier la Réservation'%}
+  {% trans 'Modifier la Réservation' %}
 {% endblock %}
 
 {% block content %}
-<h1>{% trans 'Modifier la Réservation'%}</h1>
-<form method="post">
-    {% csrf_token %}
-    {{  form.as_p }}
-    <div class="mb-3">
-        <label for="room" class="form-label">{% trans 'Salle'%}</label>
-        <input type="text" class="form-control" id="room" value="{{ reservation.room.name }}" disabled>
+<div class="container d-flex justify-content-center align-items-center mt-5 vh-100">
+    <div class="card p-4 shadow-sm" style="width: 100%; max-width: 600px; border: none;">
+      <h1 class="text-center mb-4">{% trans 'Modifier la Réservation' %}</h1>
+      <form method="post">
+          {% csrf_token %}
+
+          <!-- Champ pour modifier la salle -->
+          <div class="mb-3">
+              <label for="room" class="form-label">{% trans 'Salle' %}</label>
+              <select class="form-control border-0 border-bottom" id="room" name="room" required>
+                  <option value="{{ reservation.room.id }}" selected>{{ reservation.room.name }}</option>
+                  <option value="1">{% trans 'Salle 1' %}</option>
+                  <option value="2">{% trans 'Salle 2' %}</option>
+                  <option value="3">{% trans 'Salle 3' %}</option>
+              </select>
+          </div>
+
+          <!-- Champ pour la date de début -->
+          <div class="mb-3">
+              <label for="date_start" class="form-label">{% trans 'Date de Début' %}</label>
+              <input type="datetime-local" class="form-control border-0 border-bottom" id="date_start" name="date_start" value="{{ reservation.date_start|date:'Y-m-d\TH:i' }}" required>
+          </div>
+
+          <!-- Champ pour la date de fin -->
+          <div class="mb-3">
+              <label for="date_end" class="form-label">{% trans 'Date de Fin' %}</label>
+              <input type="datetime-local" class="form-control border-0 border-bottom" id="date_end" name="date_end" value="{{ reservation.date_end|date:'Y-m-d\TH:i' }}" required>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">{% trans 'Modifier' %}</button>
+            <a href="{% url 'list_reservations' %}" class="btn btn-secondary">{% trans 'Annuler' %}</a>
+          </div>
+      </form>
     </div>
-    <div class="mb-3">
-        <label for="date_start" class="form-label">{% trans 'Date de Début'%}</label>
-        <input type="datetime-local" class="form-control" id="date_start" name="date_start" value="{{ reservation.date_start|date:'Y-m-d\TH:i' }}" required>
-    </div>
-    <div class="mb-3">
-        <label for="date_end" class="form-label">{% trans 'Date de Fin'%}</label>
-        <input type="datetime-local" class="form-control" id="date_end" name="date_end" value="{{ reservation.date_end|date:'Y-m-d\TH:i' }}" required>
-    </div>
-    <button type="submit" class="btn btn-success">{% trans 'modifier'%} </button>
-    <a href="{% url 'list_reservations' %}" class="btn btn-secondary">{% trans 'Annuler'%}</a>
-</form>
+</div>
 {% endblock %}

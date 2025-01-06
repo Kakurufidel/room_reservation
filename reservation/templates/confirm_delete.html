@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}
-    {% trans "Suppression"%}
+    <title>{% trans "Suppression" %}</title>
 {% endblock %}
 
-{% block content %}
-<h1>{% trans "Supprimer"%}</h1>
-<p>{% trans "Êtes-vous sûr de vouloir supprimer la réservation pour" %}<strong>{{ reservation.room.name }}</strong> ?</p>
-<p>{% trans 'Du '%} {{ reservation.date_start }} {% trans 'au'%}  {{ reservation.date_end }}</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">{% trans 'Supprimer'%}</button>
-    <a href="{% url 'list_reservations' %}" class="btn btn-secondary">{% trans 'Annuler'%}</a>
-</form>
-{% endblock %}
+<body>
+    {% block content %}
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="text-center">
+            <h1>{% trans "Supprimer" %}</h1>
+            <p>{% trans "Êtes-vous sûr de vouloir supprimer la réservation pour" %} <strong>{{ reservation.room.name }}</strong> ?</p>
+            <p>{% trans 'Du '%} {{ reservation.date_start }} {% trans 'au'%}  {{ reservation.date_end }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">{% trans 'Supprimer' %}</button>
+                <a href="{% url 'list_reservations' %}" class="btn btn-secondary">{% trans 'Annuler' %}</a>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

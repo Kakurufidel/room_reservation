@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from reservation.apps.authentication.models import User, UserRequestHistory
 from reservation.models import Reservation, Room
+from reservation.apps.authentication.models import User, UserRequestHistory
 
 
 # Sérialiseur pour les utilisateurs
@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # Sérialiseur pour l'historique des requêtes utilisateur
-class UserRequestHistorySerializer(serializers.ModelSerializer):
+class UserHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRequestHistory
         fields = ("user", "path", "timestamp", "action")
@@ -26,12 +26,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
 # Sérialiseur pour les réservations
 class ReservationSerializer(serializers.ModelSerializer):
-    room = RoomSerializer(
-        read_only=True
-    )  # En cas de besoin, vous pouvez exposer la salle réservée
-    created_by = UserSerializer(
-        read_only=True
-    )  # Utilisateur ayant effectué la réservation
+    room = RoomSerializer(read_only=True)
+    created_by = UserSerializer(read_only=True)
 
     class Meta:
         model = Reservation
@@ -48,3 +44,9 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     def get_room_name(self, obj):
         return obj.room.name if obj.room else None
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "last_name"]

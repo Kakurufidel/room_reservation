@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-5" style="margin-top: 80px;">
+    <h1>{% trans "Liste des utilisateurs" %}</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Nom d'utilisateur" %}</th>
+                <th>{% trans "Email" %}</th>
+                <th>{% trans "Profession" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.profession }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

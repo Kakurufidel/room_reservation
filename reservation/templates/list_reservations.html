@@ -7,40 +7,42 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{% trans "Liste des Réservations" %}</h1>
+  <!-- Ajout d'un espacement supplémentaire avec mt-6 ou mt-7 pour un espacement plus grand -->
+  <div class="container py-5" style="margin-top: 80px;">
+    <h1>{% trans "Liste des Réservations" %}</h1>
 
-  <p>{% trans "Total des réservations" %} : {{ page_obj.paginator.count }}</p>
+    <p>{% trans "Total des réservations" %} : {{ page_obj.paginator.count }}</p>
 
-  <ul class="list-group">
-    {% for reservation in page_obj %}
-      <li class="list-group-item">
-        {{ reservation.room.name }} - {% trans "du" %} {{ reservation.date_start }} {% trans "au" %} {{ reservation.date_end }}
-        <div class="float-end">
-          <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-primary btn-sm">{% trans "Modifier" %}</a>
-          <a href="{% url 'confirm_delete_reservation' reservation.id %}" class="btn btn-danger btn-sm">{% trans "Supprimer" %}</a>
-        </div>
-      </li>
-    {% empty %}
-      <li class="list-group-item">{% trans "Aucune réservation trouvée." %}</li>
-    {% endfor %}
-  </ul>
+    <ul class="list-group">
+      {% for reservation in page_obj %}
+        <li class="list-group-item">
+          {{ reservation.room.name }} - {% trans "du" %} {{ reservation.date_start }} {% trans "au" %} {{ reservation.date_end }}
+          <div class="float-end">
+            <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-primary btn-sm">{% trans "Modifier" %}</a>
+            <a href="{% url 'confirm_delete_reservation' reservation.id %}" class="btn btn-danger btn-sm">{% trans "Supprimer" %}</a>
+          </div>
+        </li>
+      {% empty %}
+        <li class="list-group-item">{% trans "Aucune réservation trouvée." %}</li>
+      {% endfor %}
+    </ul>
 
-  <div class="pagination mt-4 text-center">
-    <span class="step-links">
-      {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo; {% trans "Première" %}</a>
-        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Précédente" %}</a>
-      {% endif %}
+    <div class="pagination mt-4 text-center">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; {% trans "Première" %}</a>
+          <a href="?page={{ page_obj.previous_page_number }}">{% trans "Précédente" %}</a>
+        {% endif %}
 
-      <span class="current">
-        {% trans "Page" %} {{ page_obj.number }} {% trans "sur" %} {{ page_obj.paginator.num_pages }}
+        <span class="current">
+          {% trans "Page" %} {{ page_obj.number }} {% trans "sur" %} {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">{% trans "Suivante" %}</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">{% trans "Dernière" %} &raquo;</a>
+        {% endif %}
       </span>
-
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">{% trans "Suivante" %}</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">{% trans "Dernière" %} &raquo;</a>
-      {% endif %}
-    </span>
+    </div>
   </div>
-
 {% endblock %}

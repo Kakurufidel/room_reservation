@@ -1,74 +1,115 @@
 {% extends 'base_auth.html' %}
 {% load widget_tweaks %}
 {% load i18n %}
+
 {% block title %}
-    Inscription
-{% endblock  %}
+    {% trans "Inscription" %}
+{% endblock %}
 
 {% block content %}
-        <div class="wd-30 mx-auto d-flex justify-content-center">
-            <form method="POST" class="wd-30 mx-auto">
-                {% csrf_token %}
+<div class="container d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 150px;">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; background-color: #f4f4f9;">
+        <h2 class="text-center mb-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+            {% trans "Inscription" %}
+        </h2>
+        <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
 
-                {% with WIDGET_ERROR_CLASS='is-invalid' %}
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-
-                  <div class="col-md-6 mb-4">
-                        <div data-mdb-input-init class="form-outline">
-                        <label class="form-label" for="id_name">{% trans 'Noms'%} </label>
-                        {% render_field form.username class="form-control " %}
-                        <small class="invalid-feedback">{{ form.errors.name }}</small>
-                        </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline">
-                      <label class="form-label" for="form3Example2">{% trans 'profession'%}</label>
-                      {% render_field form.address class="form-control" %}
-                      <small class="invalid-feedback">{{ form.errors.phone_number }}</small>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline">
-                      <label class="form-label" for="form3Example2">{% trans 'Adresse'%}</label>
-                      {% render_field form.profession class="form-control" %}
-                      <small class="invalid-feedback">{{ form.errors.phone_number }}</small>
-                    </div>
-                  </div>
-
-
-                <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline mb-4">
-                    <label class="form-label" for="form3Example3">{% trans 'Adresse mail'%}</label>
-                    {% render_field form.email class="form-control" %}
-                    <small class="invalid-feedback">{{ form.errors.email }}</small>
-                    </div>
+            {% with WIDGET_ERROR_CLASS='is-invalid' %}
+            <!-- Champ pour le nom d'utilisateur -->
+            <div class="mb-3">
+                <label for="id_username" class="form-label">{% trans "Nom d'utilisateur" %}</label>
+                {% render_field form.username class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-
-                <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline mb-4">
-                    <label class="form-label" for="form3Example4">{% trans 'Mot de passe'%}</label>
-                    {% render_field form.password1 class="form-control" %}
-                    <small class="invalid-feedback">{{ form.errors.password1 }}</small>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div data-mdb-input-init class="form-outline mb-4">
-                    <label class="form-label" for="form3Example4">{% trans 'Confirmation de mot de passe'%}</label>
-                    {% render_field form.password2 class="form-control" %}
-                    <small class="invalid-feedback">{{ form.errors.password2 }}</small>
-                    </div>
-                </div>
-                {%  endwith %}
-
-
-                <button type="submit" class="btn btn-primary btn-block mb-4">
-                  {% trans "S'inscrire" %}
-                </button>
-
-                <div>
-                  <p>{% trans "Vous avez déjà un compte ?"%} <a href="{% url 'login' %}">{% trans 'Connectez-vous.'%}</a></p>
-                </div>
-            </form>
             </div>
 
+            <!-- Champ pour la profession -->
+            <div class="mb-3">
+                <label for="id_profession" class="form-label">{% trans "Profession" %}</label>
+                {% render_field form.profession class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.profession.errors %}
+                        {% for error in form.profession.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Champ pour l'adresse -->
+            <div class="mb-3">
+                <label for="id_address" class="form-label">{% trans "Adresse" %}</label>
+                {% render_field form.address class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.address.errors %}
+                        {% for error in form.address.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Champ pour l'email -->
+            <div class="mb-3">
+                <label for="id_email" class="form-label">{% trans "Adresse mail" %}</label>
+                {% render_field form.email class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Champ pour le mot de passe -->
+            <div class="mb-3">
+                <label for="id_password1" class="form-label">{% trans "Mot de passe" %}</label>
+                {% render_field form.password1 class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.password1.errors %}
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Champ pour la confirmation du mot de passe -->
+            <div class="mb-4">
+                <label for="id_password2" class="form-label">{% trans "Confirmation de mot de passe" %}</label>
+                {% render_field form.password2 class="form-control border-0 border-bottom" style="border-color: #ccc;" %}
+                <div class="invalid-feedback">
+                    {% if form.password2.errors %}
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endwith %}
+
+            <!-- Bouton de soumission -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    {% trans "S'inscrire" %}
+                </button>
+            </div>
+
+            <!-- Lien vers la page de connexion -->
+            <div class="text-center mt-3">
+                <p>{% trans "Vous avez déjà un compte ?" %}
+                    <a href="{% url 'login' %}" class="text-decoration-none">{% trans "Connectez-vous." %}</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
