@@ -1,5 +1,7 @@
 from django.db import models
 from reservation.apps.core.models import BaseModel
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 class Room(BaseModel):
@@ -24,3 +26,10 @@ class Reservation(BaseModel):
 
     def __str__(self):
         return f"Reservation for {self.room.name} from {self.date_start} to {self.date_end}"
+
+    # Méthode de validation pour vérifier les dates
+    def clean(self):
+        if self.date_start < timezone.now():
+            raise ValidationError("La date de début ne peut pas être dans le passé.")
+        if self.date_end <= self.date_start:
+            raise ValidationError("La date de fin doit être après la date de début.")

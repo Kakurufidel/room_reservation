@@ -3,8 +3,7 @@ from .models import User
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
-from django.contrib.auth.views import redirect_to_login
-
+from django.utils.timezone import now
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views import View
@@ -21,7 +20,6 @@ from django.db.models import Count
 from django.conf import settings
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
-from django.utils.timezone import now
 from django.views.generic import CreateView, ListView
 
 # fonction pour la traduction
@@ -99,65 +97,65 @@ class HomeView(TemplateView):
     template_name = "index.html"
 
 
-class ReserverRoomView(View):
+class ReserverRoomView(LoginRequiredMixin, View):
+    login_url = "login"
+    redirect_field_name = "next"
+
     def get(self, request, room_id, room_name):
-        if not request.user.is_authenticated:
-            messages.error(request, "Vous devez être connecté pour réserver une salle.")
-            return redirect(
-                "login"
-            )  # Remplace 'login' par le nom de ton URL de connexion si nécessaire
         form = ReservationForm()
-        return render(
-            request,
-            "reserver_room.html",
-            {"form": form, "room_id": room_id, "room_name": room_name},
-        )
+        context = {
+            "form": form,
+            "room_id": room_id,
+            "room_name": room_name,
+        }
+        return render(request, "reserver_room.html", context)
 
     def post(self, request, room_id, room_name):
-        if not request.user.is_authenticated:
-            messages.error(request, "Vous devez être connecté pour réserver une salle.")
-            return redirect("login")
-
         form = ReservationForm(request.POST)
-
-        # Vérification si la salle est déjà réservée pour la plage horaire demandée
         if form.is_valid():
             date_start = form.cleaned_data["date_start"]
             date_end = form.cleaned_data["date_end"]
 
-            # Vérifier les réservations existantes pour la salle
-            existing_reservation = Reservation.objects.filter(
+            # Validation 1: Vérifier que la date de début n'est pas dans le passé
+            if date_start < timezone.now():
+                messages.error(
+                    request, "La date de début ne peut pas être dans le passé."
+                )
+            # Validation 2: Vérifier que la date de fin est après la date de début
+            elif date_end <= date_start:
+                messages.error(
+                    request, "La date de fin doit être après la date de début."
+                )
+            # Validation 3: Vérifier que la salle n'est pas déjà réservée à cette période
+            elif Reservation.objects.filter(
                 room_id=room_id,
-                date_start__lt=date_end,  # Si l'heure de début de la réservation est avant l'heure de fin choisie
-                date_end__gt=date_start,  # Si l'heure de fin de la réservation est après l'heure de début choisie
-            ).exists()
-
-            if existing_reservation:
+                date_start__lt=date_end,
+                date_end__gt=date_start,
+                is_delete=False,
+            ).exists():
                 messages.error(
                     request, "La salle est déjà réservée pour cette date et heure."
                 )
-                return render(
-                    request,
-                    "reserver_room.html",
-                    {"form": form, "room_id": room_id, "room_name": room_name},
+            else:
+                reservation = form.save(commit=False)
+                reservation.room_id = room_id
+                reservation.created_by = request.user
+                reservation.save()
+
+                messages.success(request, "Réservation effectuée avec succès!")
+                return redirect(
+                    "confirmation_reservation", reservation_id=reservation.id
                 )
 
-            # Si aucune réservation existante, créer une nouvelle réservation
-            reservation = form.save(commit=False)
-            reservation.room_id = room_id
-            reservation.created_by = (
-                request.user
-            )  # Ajoute l'utilisateur qui a fait la réservation
-            reservation.save()
+        else:
+            print(form.errors)
 
-            messages.success(request, "Réservation effectuée avec succès!")
-            return redirect("confirmation_reservation", reservation_id=reservation.id)
-
-        return render(
-            request,
-            "reserver_room.html",
-            {"form": form, "room_id": room_id, "room_name": room_name},
-        )
+        context = {
+            "form": form,
+            "room_id": room_id,
+            "room_name": room_name,
+        }
+        return render(request, "reserver_room.html", context)
 
 
 class ConfirmationReservationView(View):
@@ -168,7 +166,6 @@ class ConfirmationReservationView(View):
         # Récupérer le nom de la salle réservée
         room_name = reservation.room.name
 
-        # Afficher la page de confirmation avec le nom de la salle
         return render(request, "confirmation_page.html", {"room_name": room_name})
 
 

@@ -1,7 +1,7 @@
 from django.urls import path
-from django.contrib import admin
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
+from django.conf.urls.i18n import set_language
 from reservation.apps.authentication.views import (
     LoginView,
     RegistrationView,
@@ -10,7 +10,7 @@ from reservation.apps.authentication.views import (
     ReserverRoomView,
     NewRoomView,
     ListReservationsView,
-    UserHistoryView,
+    # UserHistoryView,  # Supprime cette ligne
     ModifyReservationView,
     DeleteReservationView,
     ConfirmDeleteReservationView,
@@ -24,11 +24,8 @@ from reservation.apps.authentication.views import (
     RoomDeleteView,
     ReservationListAdminView,
 )
-from django.views.i18n import set_language
-
 
 urlpatterns = [
-    # path("admin/", admin.site.urls),
     path("login/", LoginView.as_view(), name="login"),
     path("signup/", RegistrationView.as_view(), name="register"),
     path("list_rooms", ListRoomsView.as_view(), name="list_rooms"),
@@ -48,7 +45,6 @@ urlpatterns = [
     path(
         "list_reservations/", ListReservationsView.as_view(), name="list_reservations"
     ),
-    path("history/", UserHistoryView.as_view(), name="user_history"),
     path(
         "reservation/modify/<int:pk>/",
         ModifyReservationView.as_view(),
@@ -77,7 +73,5 @@ urlpatterns = [
         name="list_reservations_admin",
     ),
 ]
-
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

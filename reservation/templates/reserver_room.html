@@ -11,6 +11,14 @@
             {{ form.media }}
             <input type="hidden" name="room" value="{{ room_id }}" />
 
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="mb-3">
                 <label for="id_date_start" class="form-label">{% trans "Date et Heure de Début" %}</label>
                 <div class="input-group">
@@ -20,6 +28,13 @@
                     {{ form.date_start|add_class:"form-control form-control-sm"|attr:"placeholder:Choisissez une date et une heure" }}
                 </div>
                 <small class="form-text text-muted">{% trans "Choisissez une date et une heure de début." %}</small>
+                {% if form.date_start.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.date_start.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
             <div class="mb-3">
@@ -31,6 +46,13 @@
                     {{ form.date_end|add_class:"form-control form-control-sm"|attr:"placeholder:Choisissez une date et une heure" }}
                 </div>
                 <small class="form-text text-muted">{% trans "Choisissez une date et une heure de fin." %}</small>
+                {% if form.date_end.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.date_end.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
             <button type="submit" class="btn btn-primary w-100">
