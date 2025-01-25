@@ -5,37 +5,37 @@
 
 <div class="container py-5" style="margin-top: 80px;">
     <div class="row mt-4 d-flex justify-content-center align-items-center">
-        <h2 class="text-center">{% trans "liste des actions" %}</h2>
+        <h2 class="text-center">{% trans "Liste des actions" %}</h2>
+
+        <!-- Bloc principal -->
         <div class="d-flex justify-content-between flex-wrap mt-4">
             <!-- Ajouter une Salle -->
-            <div class="card mx-2" style="width: 18rem;">
+            <div class="card text-white bg-primary mx-2 shadow" style="width: 18rem; cursor: pointer;" ondblclick="window.location.href='{% url 'create_room' %}'">
                 <div class="card-body text-center">
                     <h5 class="card-title">{% trans "Ajouter une Salle" %}</h5>
-                    <a href="{% url 'create_room' %}" class="btn btn-primary">{% trans "Action" %}</a>
                 </div>
             </div>
 
             <!-- Voir la Liste des Salles -->
-            <div class="card mx-2" style="width: 18rem;">
+            <div class="card text-white bg-info mx-2 shadow" style="width: 18rem; cursor: pointer;" ondblclick="window.location.href='{% url 'list_rooms_admin' %}'">
                 <div class="card-body text-center">
                     <h5 class="card-title">{% trans "Voir la Liste des Salles" %}</h5>
-                    <a href="{% url 'list_rooms_admin' %}" class="btn btn-info">{% trans "Action" %}</a>
                 </div>
             </div>
 
             <!-- Voir les Réservations -->
-            <div class="card mx-2" style="width: 18rem;">
+            <div class="card text-white bg-warning mx-2 shadow" style="width: 18rem; cursor: pointer;" ondblclick="window.location.href='{% url 'list_reservations_admin' %}'">
                 <div class="card-body text-center">
                     <h5 class="card-title">{% trans "Voir les Réservations" %}</h5>
-                    <a href="{% url 'list_reservations_admin' %}" class="btn btn-warning">{% trans "Action" %}</a>
                 </div>
             </div>
+        </div>
 
-            <!-- Voir les Utilisateurs -->
-            <div class="card mx-2" style="width: 18rem;">
+        <!-- Bloc séparé pour Voir les Utilisateurs -->
+        <div class="mt-5 d-flex justify-content-center">
+            <div class="card text-white bg-success shadow" style="width: 18rem; cursor: pointer;" ondblclick="window.location.href='{% url 'user_list' %}'">
                 <div class="card-body text-center">
                     <h5 class="card-title">{% trans "Voir les Utilisateurs" %}</h5>
-                    <a href="{% url 'user_list' %}" class="btn btn-success">{% trans "Action" %}</a>
                 </div>
             </div>
         </div>
