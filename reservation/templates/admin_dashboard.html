@@ -3,33 +3,43 @@
 
 {% block content %}
 
-  <div class="container py-5" style="margin-top: 80px;">
-
-      <div class="row mt-4 container d-flex justify-content-center align-items-center ">
-          <h2 class="text-center">{% trans "liste de actions" %}</h2>
-          <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>{% trans "operations possible" %}</h5>
+<div class="container py-5" style="margin-top: 80px;">
+    <div class="row mt-4 d-flex justify-content-center align-items-center">
+        <h2 class="text-center">{% trans "liste des actions" %}</h2>
+        <div class="d-flex justify-content-between flex-wrap mt-4">
+            <!-- Ajouter une Salle -->
+            <div class="card mx-2" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{% trans "Ajouter une Salle" %}</h5>
+                    <a href="{% url 'create_room' %}" class="btn btn-primary">{% trans "Action" %}</a>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="{% url 'create_room' %}" class="btn btn-primary w-100">{% trans "Ajouter une Salle" %}</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'list_rooms_admin' %}" class="btn btn-info w-100">{% trans "Voir la Liste des Salles" %}</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'list_reservations_admin' %}" class="btn btn-warning w-100">{% trans "Voir les Réservations" %}</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'user_list' %}" class="btn btn-success w-100">{% trans "Voir les Utilisateurs" %}</a>
-                        </li>
-                    </ul>
+            </div>
+
+            <!-- Voir la Liste des Salles -->
+            <div class="card mx-2" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{% trans "Voir la Liste des Salles" %}</h5>
+                    <a href="{% url 'list_rooms_admin' %}" class="btn btn-info">{% trans "Action" %}</a>
+                </div>
+            </div>
+
+            <!-- Voir les Réservations -->
+            <div class="card mx-2" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{% trans "Voir les Réservations" %}</h5>
+                    <a href="{% url 'list_reservations_admin' %}" class="btn btn-warning">{% trans "Action" %}</a>
+                </div>
+            </div>
+
+            <!-- Voir les Utilisateurs -->
+            <div class="card mx-2" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{% trans "Voir les Utilisateurs" %}</h5>
+                    <a href="{% url 'user_list' %}" class="btn btn-success">{% trans "Action" %}</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
